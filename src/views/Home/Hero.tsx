@@ -11,6 +11,7 @@ function Hero() {
           ORDER TODAY!
         </Link>
       </div>
+
       <div className="w-full flex justify-center">
         <div className="w-full max-w-8xl margins py-12 sm:py-16 lg:py-24 flex items-center justify-between flex-col lg:flex-row gap-y-10 gap-x-10">
           <div className="flex-1 flex flex-col max-w-[460px]">
