@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { BsCardImage } from "react-icons/bs";
 
-function CreateYearBlock() {
+function CreateSignYearBlock() {
   const [activeTab, setActiveTab] = useState("create-new");
 
   return (
@@ -11,7 +11,7 @@ function CreateYearBlock() {
       <div className="w-full flex justify-center margins">
         <div className="w-full flex flex-col py-12 sm:py-16 lg:py-24">
           <div className="font-bold text-3xl sm:text-4xl lg:text-6xl leading-[40px] sm:leading-[50px] lg:leading-[80px] text-service-900 text-center mb-4 lg:mb-5">
-            Create New YearBlock
+            Sign YearBlock
           </div>
           <div className="text-sm sm:text-base lg:text-[22px] leading-6 sm:leading-[28px] lg:leading-[36px] text-service-700 text-center mb-8 xl:mb-12">
             Use your DigiSigs to sign a classmates yearblook
@@ -44,6 +44,14 @@ function CreateYearBlock() {
             </div>
 
             <div className="w-full flex flex-col gap-y-6 sm:gap-y-8">
+              <div className="w-full flex items-center justify-center">
+                <Image
+                  src="/images/yearBlockSign.png"
+                  width={250}
+                  height={250}
+                  alt="Logo"
+                />
+              </div>
               <div className="w-full">
                 <label
                   htmlFor="yearbook"
@@ -62,66 +70,32 @@ function CreateYearBlock() {
               </div>
               <div className="w-full">
                 <label
-                  htmlFor="yearbook"
+                  htmlFor="digisigs"
                   className="text-sm sm:text-base font-semibold leading-6 text-gray-900"
                 >
-                  Whitelist
+                  DigiSigs
                 </label>
                 <div className="mt-2">
                   <input
                     type="text"
-                    name="whitelist"
-                    id="whitelist"
+                    name="digisigs"
+                    id="digisigs"
                     className="w-full rounded-md border-0 py-1.5 px-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-700 sm:text-base sm:leading-8"
                   />
                 </div>
               </div>
               <div className="w-full">
                 <label
-                  htmlFor="districtName"
+                  htmlFor="comment"
                   className="text-sm sm:text-base font-semibold leading-6 text-gray-900"
                 >
-                  District Name
+                  Comment
                 </label>
                 <div className="mt-2">
                   <input
                     type="text"
-                    name="districtName"
-                    id="districtName"
-                    placeholder="Coming Soon"
-                    className="w-full rounded-md border-0 py-1.5 px-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-700 sm:text-base sm:leading-8"
-                  />
-                </div>
-              </div>
-              <div className="w-full">
-                <label
-                  htmlFor="schoolName"
-                  className="text-sm sm:text-base font-semibold leading-6 text-gray-900"
-                >
-                  School Name
-                </label>
-                <div className="mt-2">
-                  <input
-                    type="text"
-                    name="schoolName"
-                    id="schoolName"
-                    placeholder="Coming Soon"
-                    className="w-full rounded-md border-0 py-1.5 px-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-700 sm:text-base sm:leading-8"
-                  />
-                </div>
-              </div>
-              <div className="w-full">
-                <label
-                  htmlFor="schoolYear"
-                  className="text-sm sm:text-base font-semibold leading-6 text-gray-900"
-                >
-                  School Year
-                </label>
-                <div className="mt-2">
-                  <input
-                    type="text"
-                    name="schoolYear"
-                    id="schoolYear"
+                    name="comment"
+                    id="comment"
                     placeholder="Coming Soon"
                     className="w-full rounded-md border-0 py-1.5 px-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-700 sm:text-base sm:leading-8"
                   />
@@ -132,7 +106,7 @@ function CreateYearBlock() {
                   htmlFor="front-cover"
                   className="text-sm sm:text-base font-semibold leading-6 text-gray-900"
                 >
-                  Front Cover
+                  Preview
                 </label>
                 <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
                   <div className="text-center">
@@ -162,7 +136,7 @@ function CreateYearBlock() {
                 </div>
               </div>
               <div className="w-full flex items-center gap-x-5">
-                <button className="buttonPrimary">Mint YearBlocks</button>
+                <button className="buttonPrimary">Sign YearBlock</button>
               </div>
             </div>
           </div>
@@ -172,4 +146,4 @@ function CreateYearBlock() {
   );
 }
 
-export default CreateYearBlock;
+export default CreateSignYearBlock;
