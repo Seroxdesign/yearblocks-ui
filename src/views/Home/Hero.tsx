@@ -18,12 +18,12 @@ function Hero() {
               Introducing YearBlocks
             </div>
             <div className="text-sm sm:text-base lg:text-[22px] leading-6 sm:leading-[28px] lg:leading-[34px] text-service-700 text-center lg:text-start mb-8 xl:mb-12">
-              At lacus vitae nulla sagittis scelerisque nisl. Pellentesque duis
-              cursus vestibulum, facilisi ac, sed faucibus.
+              Empowering schools and students worldwide with blockchain
+              technology for seamless yearbook minting, secure ownership, and
+              lasting memories.
             </div>
             <div className="flex items-center justify-center lg:justify-start gap-x-0 sm:gap-x-3 lg:gap-x-5">
-              <button className="buttonPrimary">Primary button</button>
-              <button className="buttonTransparent">Tertiary button</button>
+              <button className="buttonPrimary">Claim my YearBlock</button>
             </div>
           </div>
           <div
