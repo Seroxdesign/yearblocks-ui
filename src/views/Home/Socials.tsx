@@ -26,7 +26,7 @@ function Socials() {
         <div className="w-full">
           <div
             className="bgImage min-h-[300px] sm:min-h-[400px] rounded-xl relative flex flex-col justify-center overflow-hidden"
-            style={{ backgroundImage: `url(/images/about-callout.jpg)` }}
+            style={{ backgroundImage: `url(/images/about-callout.webp)` }}
           >
             <div className="absolute inset-0 bg-black/40 z-0" />
             <div className="w-full h-full flex flex-col items-center justify-center z-10 margins py-6">
@@ -34,11 +34,10 @@ function Socials() {
                 Order Your YearBlocks
               </div>
               <div className="text-sm sm:text-base leading-5 sm:leading-7 font-medium text-white mb-6 text-center">
-                With a Jostens yearbook, you’re able to treasure the names,
-                faces and events that make this time so special — for always and
-                always.
+                Click below to start your journey today. Do not let another
+                memory slip away.
               </div>
-              <button className="buttonPrimary">Shope YearBlocks</button>
+              <button className="buttonPrimary">Create YearBlocks</button>
             </div>
           </div>
         </div>

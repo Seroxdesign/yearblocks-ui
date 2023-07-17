@@ -62,6 +62,16 @@ function Header() {
     }
   }, [expend]);
 
+  const handleLoginButton = () => {
+    setExpend(false);
+    fcl.logIn();
+  };
+
+  const handleSignUpButton = () => {
+    setExpend(false);
+    fcl.signUp();
+  };
+
   const UserMenu = ({ buttonClassName }: { buttonClassName?: string }) => (
     <div className="relative">
       <Menu as="div">
@@ -151,12 +161,12 @@ function Header() {
           ) : (
             <div className="flex items-center gap-x-6 xl:gap-x-8">
               <button
-                onClick={fcl.logIn}
+                onClick={handleLoginButton}
                 className="animation text-base font-semibold text-service-900 hover:text-primary-700"
               >
                 Login
               </button>
-              <button onClick={fcl.signUp} className="buttonPrimary">
+              <button onClick={handleSignUpButton} className="buttonPrimary">
                 Get Started
               </button>
             </div>
@@ -235,17 +245,19 @@ function Header() {
                 </>
               ) : (
                 <>
-                  <Link href={routes.login}>
-                    <div className="animation text-service-900 text-2xl font-semibold cursor-pointer hover:text-primary-700">
-                      Login
-                    </div>
-                  </Link>
-                  <Link
-                    href={routes.createYearBlock}
+                  <button
+                    onClick={handleLoginButton}
+                    className="animation text-service-900 text-2xl font-semibold cursor-pointer hover:text-primary-700"
+                  >
+                    Login
+                  </button>
+
+                  <button
+                    onClick={handleSignUpButton}
                     className="w-full buttonPrimary !text-2xl !font-semibold"
                   >
                     Get Started
-                  </Link>
+                  </button>
                 </>
               )}
             </div>
