@@ -1,10 +1,17 @@
 import Layout from "components/Layout";
 import React, { useState } from "react";
-import Image from "next/image";
 import { BsCardImage } from "react-icons/bs";
+import MintYearBlockComponent from "components/flow/mint-yearblock";
 
 function CreateYearBlock() {
   const [activeTab, setActiveTab] = useState("create-new");
+  const [values, setValues] = useState({
+    uid: "",
+    yearBlockName: "",
+    mediaLocation:
+      "https://bafybeicov5maw7ztte6rz6inrlovmkcpxfsbej3ohqvqk7ycv2hxlsbd5m.ipfs.nftstorage.link/",
+    allowList: [],
+  });
 
   return (
     <Layout>
@@ -54,8 +61,13 @@ function CreateYearBlock() {
                 <div className="mt-2">
                   <input
                     type="text"
-                    name="yearbook"
-                    id="yearbook"
+                    value={values.yearBlockName}
+                    onChange={(e) =>
+                      setValues({
+                        ...values,
+                        yearBlockName: e.target.value,
+                      })
+                    }
                     className="w-full rounded-md border-0 py-1.5 px-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-700 sm:text-base sm:leading-8"
                   />
                 </div>
@@ -162,7 +174,8 @@ function CreateYearBlock() {
                 </div>
               </div>
               <div className="w-full flex items-center gap-x-5">
-                <button className="buttonPrimary">Mint YearBlocks</button>
+                <MintYearBlockComponent buttonStyle="buttonPrimary" />
+                {/* <button className="buttonPrimary">Mint YearBlocks</button> */}
               </div>
             </div>
           </div>

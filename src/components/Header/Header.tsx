@@ -6,6 +6,7 @@ import routes from "routes";
 import * as fcl from "@onflow/fcl";
 import { Menu, Transition } from "@headlessui/react";
 import "flow/config";
+// import { config } from "@onflow/fcl";
 
 export interface HeaderType {
   title: string;
@@ -51,7 +52,20 @@ function Header() {
   const [user, setUser] = useState({ loggedIn: null, addr: null });
 
   useEffect(() => {
-    fcl.currentUser.subscribe(setUser);
+    const setUpFlow = async () => {
+      fcl
+        .config()
+        .put("accessNode.api", "https://rest-testnet.onflow.org")
+        .put("flow.network", "testnet")
+        .put(
+          "discovery.wallet",
+          "https://fcl-discovery.onflow.org/api/testnet/authn"
+        );
+    };
+
+    setUpFlow().then(() => {
+      fcl.currentUser.subscribe(setUser);
+    });
   }, []);
 
   useEffect(() => {
