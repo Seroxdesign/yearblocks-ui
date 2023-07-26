@@ -116,4 +116,34 @@
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
   }
+
+  /* Spinner  */
+  .spinner-volume {
+    @apply w-[35px] h-[35px] bg-primary-700 rounded-full relative;
+    -webkit-animation: spVolRot 0.6s infinite linear;
+    animation: spVolRot 0.6s infinite linear;
+  }
+  .sp-volume:after {
+    content: "";
+    border-radius: 50%;
+    @apply w-3 h-3 absolute left-[5px] top-[5px] block;
+    background-color: #fff;
+  }
+
+  @-webkit-keyframes spVolRot {
+    from {
+      -webkit-transform: rotate(0deg);
+    }
+    to {
+      -webkit-transform: rotate(359deg);
+    }
+  }
+  @keyframes spVolRot {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(359deg);
+    }
+  }
 }
