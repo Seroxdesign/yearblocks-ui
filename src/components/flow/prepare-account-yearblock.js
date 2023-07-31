@@ -11,8 +11,8 @@ function PrepareAccountYearBlock() {
     try {
       const res = await fcl.mutate({
         cadence: `
-        import YearBlocks from 0x9b14c9b53986a492
-        import NonFungibleToken from 0x9b14c9b53986a492
+        import YearBlocks from 0x770b3ddf7db51dd1
+        import NonFungibleToken from 0x770b3ddf7db51dd1
         
         /// This transaction sets up the signer with a YearBlocks Collection
         ///
@@ -27,7 +27,7 @@ function PrepareAccountYearBlock() {
             // Prepare to link PublicPath
             signer.unlink(YearBlocks.CollectionPublicPath)
             // Link public Capabilities
-            signer.link<&{NonFungibleToken.CollectionPublic, NonFungibleToken.Receiver, YearBlocks.CollectionPublic}>(
+            signer.link<&{YearBlocks.CollectionPublic}>(
               YearBlocks.CollectionPublicPath,
               target: YearBlocks.CollectionStoragePath
             )
