@@ -3,7 +3,7 @@ import { useState } from "react";
 import OverlayLoading from "components/OverlayLoading";
 
 fcl.authenticate();
-function MintSignatureComponent({ buttonStyle }) {
+function MintSignatureComponent() {
   const [loading, setLoading] = useState(false);
 
   //Id should be a unique number, comment is a string, link is a string url to an img of a signature, name is a string

@@ -3,7 +3,7 @@ import { useState } from "react";
 import OverlayLoading from "components/OverlayLoading";
 
 fcl.authenticate();
-function AttachSignatureToYearBlockComponent({ buttonStyle }) {
+function AttachSignatureToYearBlockComponent() {
   const [loading, setLoading] = useState(false);
 
   //Need ID of existing YearBlock NFT, Need ID of existing Signature

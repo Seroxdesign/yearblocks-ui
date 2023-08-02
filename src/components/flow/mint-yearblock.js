@@ -7,7 +7,7 @@ import OverlayLoading from "components/OverlayLoading";
 // allowList = []
 // name = 'year-2023' type string
 fcl.authenticate();
-function MintYearBlockComponent({ buttonStyle }) {
+function MintYearBlockComponent() {
   const [loading, setLoading] = useState(false);
 
   async function mintYearBlockNFT(id, link, allowList, name) {
