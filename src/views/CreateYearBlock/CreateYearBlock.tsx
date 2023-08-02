@@ -174,7 +174,7 @@ function CreateYearBlock() {
                 </div>
               </div>
               <div className="w-full flex items-center gap-x-5">
-                <MintYearBlockComponent buttonStyle="buttonPrimary" />
+                <MintYearBlockComponent />
                 {/* <button className="buttonPrimary">Mint YearBlocks</button> */}
               </div>
             </div>
