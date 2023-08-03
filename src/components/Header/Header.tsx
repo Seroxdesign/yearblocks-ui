@@ -52,20 +52,9 @@ function Header() {
   const [user, setUser] = useState({ loggedIn: null, addr: null });
 
   useEffect(() => {
-    const setUpFlow = async () => {
-      fcl
-        .config()
-        .put("accessNode.api", "https://rest-testnet.onflow.org")
-        .put("flow.network", "testnet")
-        .put(
-          "discovery.wallet",
-          "https://fcl-discovery.onflow.org/api/testnet/authn"
-        );
-    };
-
-    setUpFlow().then(() => {
-      fcl.currentUser.subscribe(setUser);
-    });
+    
+    fcl.currentUser.subscribe(setUser);
+  
   }, []);
 
   useEffect(() => {
@@ -130,7 +119,7 @@ function Header() {
                     className={`${
                       active ? "bg-primary-700 text-white" : "text-gray-900"
                     } group flex w-full items-center rounded-md px-3.5 py-2 text-base`}
-                    onClick={fcl.unauthenticate}
+                    onClick={() => fcl.unauthenticate()}
                   >
                     Logout
                   </button>

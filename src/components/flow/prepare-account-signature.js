@@ -1,7 +1,7 @@
 import * as fcl from "@onflow/fcl";
 import { useState } from "react";
 
-function PrepareAccountYearBlock() {
+function PrepareAccountSignature() {
   const [loading, setLoading] = useState(false);
 
   console.log("fcl....", fcl);
@@ -11,36 +11,37 @@ function PrepareAccountYearBlock() {
     try {
       const res = await fcl.mutate({
         cadence: `
-        import YearBlocks from 0x770b3ddf7db51dd1
+        import Signatures from 0x770b3ddf7db51dd1
         import NonFungibleToken from 0x770b3ddf7db51dd1
         
-        /// This transaction sets up the signer with a YearBlocks Collection
+        /// This transaction sets up the signer with a Signatures Collection
         ///
         transaction {
           prepare(signer: AuthAccount) {
             // Check if a Collection is already in Storage where expected
-            if signer.type(at: YearBlocks.CollectionStoragePath) == nil {
+            if signer.type(at: Signatures.CollectionStoragePath) == nil {
               // Create and save
-              signer.save(<-YearBlocks.createEmptyCollection(), to: YearBlocks.CollectionStoragePath)
+              signer.save(<-Signatures.createEmptyCollection(), to: Signatures.CollectionStoragePath)
+              
+              // Prepare to link PublicPath
+              signer.unlink(Signatures.CollectionPublicPath)
+              // Link public Capabilities
+              signer.link<&{Signatures.CollectionPublic}>(
+                Signatures.CollectionPublicPath,
+                target: Signatures.CollectionStoragePath
+              )
+        
+              // Prepare to link PrivatePath
+              signer.unlink(Signatures.ProviderPrivatePath)
+              // Link private Capabilities
+              signer.link<&{NonFungibleToken.Receiver}>(
+                Signatures.ProviderPrivatePath,
+                target: Signatures.CollectionStoragePath
+              )
             }
-        
-            // Prepare to link PublicPath
-            signer.unlink(YearBlocks.CollectionPublicPath)
-            // Link public Capabilities
-            signer.link<&{YearBlocks.CollectionPublic}>(
-              YearBlocks.CollectionPublicPath,
-              target: YearBlocks.CollectionStoragePath
-            )
-        
-            // Prepare to link PrivatePath
-            signer.unlink(YearBlocks.CollectionPrivatePath)
-            // Link private Capabilities
-            signer.link<&{NonFungibleToken.Receiver}>(
-              YearBlocks.CollectionPrivatePath,
-              target: YearBlocks.CollectionStoragePath
-            )
           }
-        }`,
+        }
+        `,
       });
       fcl.tx(res).subscribe((res) => {
         console.log(res);
@@ -100,7 +101,7 @@ function PrepareAccountYearBlock() {
               marginRight: "10px",
             }}
           >
-            Prepare Your Account
+            Prepare Your Signatures Account
           </button>
         </div>
       </main>
@@ -109,4 +110,4 @@ function PrepareAccountYearBlock() {
   );
 }
 
-export default PrepareAccountYearBlock;
+export default PrepareAccountSignature;

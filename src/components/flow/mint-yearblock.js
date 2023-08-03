@@ -6,26 +6,26 @@ import OverlayLoading from "components/OverlayLoading";
 // link = https://drive.google.com/file/d/1ahYRs7qeKMRgZwXMokaGYR6oOtd4Swdk/view?usp
 // allowList = []
 // name = 'year-2023' type string
-
-function MintYearBlockComponent({ buttonStyle }) {
+fcl.authenticate();
+function MintYearBlockComponent() {
   const [loading, setLoading] = useState(false);
 
   async function mintYearBlockNFT(id, link, allowList, name) {
+    const user = fcl.currentUser().authorization;
+    console.log(user, "user")
     setLoading(true);
     try {
       const res = await fcl.mutate({
         cadence: `
-            import YearBlocks from 0x9b14c9b53986a492
-            import NonFungibleToken from 0x9b14c9b53986a492
+            import YearBlocks from 0x770b3ddf7db51dd1
+            import NonFungibleToken from 0x770b3ddf7db51dd1
             
-            /// This transaction mints a new YearBlocks NFT and saves it in the signer's Collection
-            ///
             transaction (id: UInt64, link: String, allowList: [String], name: String) {
             
               let collectionRef: &{YearBlocks.CollectionPublic}
             
               prepare(signer: AuthAccount) {
-                // Get a reference to the signer's YearBlocks Collection
+                // Get a reference to the signer''s YearBlocks Collection
                 self.collectionRef = signer.getCapability<&{YearBlocks.CollectionPublic}>(
                   YearBlocks.CollectionPublicPath
                 ).borrow()
@@ -39,23 +39,22 @@ function MintYearBlockComponent({ buttonStyle }) {
                 )
               }
             }`,
+
         args: (arg, t) => [
           arg(id, t.UInt64),
           arg(link, t.String),
-          arg(allowList, t.Array),
+          arg(allowList, t.Array(t.String)),
           arg(name, t.String),
         ],
-        limit: 9999,
+        proposer: user,
+        payer: user,
+        authorizations: [user],
+        limit: 999,
       });
-      fcl.tx(res).subscribe((res) => {
-        if (res.status === 4 && res.errorMessage === "") {
-          window.alert("Flovatar NFT Minted!");
-          setImgData("");
-          setLoading(false);
-        }
-      });
+      const transaction = await fcl.tx(res).onceSealed();
+      console.log(transaction, "transaction",  fcl.currentUser);
     } catch (error) {
-      console.log("err", error);
+      console.log("err", fcl.currentUser, error);
       setLoading(false);
     }
   }
@@ -74,9 +73,9 @@ function MintYearBlockComponent({ buttonStyle }) {
           className={buttonStyle}
           onClick={() =>
             mintYearBlockNFT(
-              2,
-              "https://drive.google.com/file/d/1ahYRs7qeKMRgZwXMokaGYR6oOtd4Swdk/view?usp",
-              [],
+              3,
+              "https://drive.google.com/file/d/1ahYRs7qeKMRgZwXMokaGYR6oOtd4Swdk/view?usp/",
+              ['steady@steadystudios.org'],
               "year-2023-part2"
             )
           }
