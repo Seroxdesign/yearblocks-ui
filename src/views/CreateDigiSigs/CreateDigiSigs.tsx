@@ -121,7 +121,7 @@ function CreateYearBlock() {
               </div>
               <div className="w-full flex items-center gap-x-5">
                 <PrepareAccountSignature className="buttonPrimary" />
-                <MintSignatureComponent buttonStyle={"buttonPrimary"} />
+                <MintSignatureComponent className={"buttonPrimary"} />
               </div>
             </div>
           </div>

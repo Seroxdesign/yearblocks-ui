@@ -3,7 +3,7 @@ import OverlayLoading from "components/OverlayLoading";
 import { useState } from "react";
 import { toast } from "react-toastify";
 
-function PrepareAccountYearBlock({ buttonStyle = "buttonPrimary" }) {
+function PrepareAccountYearBlock({ className = "buttonPrimary" }) {
   const [loading, setLoading] = useState(false);
 
   async function prepare() {
@@ -70,7 +70,7 @@ function PrepareAccountYearBlock({ buttonStyle = "buttonPrimary" }) {
         onChange={e => uploadImg(e)}
         style={{ padding: '1em' }}
       /> */}
-        <button onClick={() => prepare()} className={buttonStyle}>
+        <button onClick={() => prepare()} className={className}>
           Prepare Your Account
         </button>
         {/*     <img src={imgData} alt="NFT" style={{ marginTop: '2em' }} /> */}

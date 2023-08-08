@@ -175,8 +175,8 @@ function CreateYearBlock() {
                 </div>
               </div>
               <div className="w-full flex items-center gap-x-5">
-                <PrepareAccountYearBlock buttonStyle={"buttonPrimary"} />
-                <MintYearBlockComponent buttonStyle={"buttonPrimary"} />
+                <PrepareAccountYearBlock className={"buttonPrimary"} />
+                <MintYearBlockComponent className={"buttonPrimary"} />
               </div>
             </div>
           </div>
