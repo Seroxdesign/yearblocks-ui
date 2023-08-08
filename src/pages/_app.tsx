@@ -1,6 +1,8 @@
 import "styles/globals.css";
 import type { AppProps } from "next/app";
 import Head from "next/head";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -18,6 +20,11 @@ export default function App({ Component, pageProps }: AppProps) {
           rel="stylesheet"
         />
       </Head>
+      <ToastContainer
+        autoClose={5000}
+        position="top-center"
+        className="toast-container"
+      />
       <Component {...pageProps} />
     </>
   );

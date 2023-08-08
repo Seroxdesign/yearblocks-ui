@@ -52,9 +52,7 @@ function Header() {
   const [user, setUser] = useState({ loggedIn: null, addr: null });
 
   useEffect(() => {
-    
     fcl.currentUser.subscribe(setUser);
-  
   }, []);
 
   useEffect(() => {

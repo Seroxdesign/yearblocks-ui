@@ -7,13 +7,11 @@ import AttachSignatureToYearBlockComponent from "components/flow/attach-signatur
 function Minting() {
   return (
     <Layout>
-      <MintYearBlockComponent />
-      <br />
-      <br />
-      <MintSignatureComponent />
-      <br />
-      <br />
-      <AttachSignatureToYearBlockComponent />
+      <div className="flex flex-col items-center justify-center gap-y-8 py-20">
+        <MintYearBlockComponent className={"buttonPrimary"} />
+        <MintSignatureComponent className={"buttonPrimary"} />
+        <AttachSignatureToYearBlockComponent className={"buttonPrimary"} />
+      </div>
     </Layout>
   );
 }

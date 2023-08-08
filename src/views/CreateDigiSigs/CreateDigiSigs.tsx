@@ -2,6 +2,8 @@ import Layout from "components/Layout";
 import React, { useState } from "react";
 import Image from "next/image";
 import { BsCardImage } from "react-icons/bs";
+import MintSignatureComponent from "components/flow/mint-signature";
+import PrepareAccountSignature from "components/flow/prepare-account-signature";
 
 function CreateYearBlock() {
   const [activeTab, setActiveTab] = useState("create-new");
@@ -118,7 +120,8 @@ function CreateYearBlock() {
                 </div>
               </div>
               <div className="w-full flex items-center gap-x-5">
-                <button className="buttonPrimary">Mint DigiSig</button>
+                <PrepareAccountSignature className="buttonPrimary" />
+                <MintSignatureComponent buttonStyle={"buttonPrimary"} />
               </div>
             </div>
           </div>

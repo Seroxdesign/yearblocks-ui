@@ -7,12 +7,12 @@ import OverlayLoading from "components/OverlayLoading";
 // allowList = []
 // name = 'year-2023' type string
 fcl.authenticate();
-function MintYearBlockComponent() {
+function MintYearBlockComponent({ className = "buttonPrimary" }) {
   const [loading, setLoading] = useState(false);
 
   async function mintYearBlockNFT(id, link, allowList, name) {
     const user = fcl.currentUser().authorization;
-    console.log(user, "user")
+    console.log(user, "user");
     setLoading(true);
     try {
       const res = await fcl.mutate({
@@ -52,7 +52,8 @@ function MintYearBlockComponent() {
         limit: 999,
       });
       const transaction = await fcl.tx(res).onceSealed();
-      console.log(transaction, "transaction",  fcl.currentUser);
+      console.log(transaction, "transaction", fcl.currentUser);
+      setLoading(false);
     } catch (error) {
       console.log("err", fcl.currentUser, error);
       setLoading(false);
@@ -70,12 +71,12 @@ function MintYearBlockComponent() {
           style={{ padding: '1em' }}
         /> */}
         <button
-          className={buttonStyle}
+          className={className}
           onClick={() =>
             mintYearBlockNFT(
               3,
               "https://drive.google.com/file/d/1ahYRs7qeKMRgZwXMokaGYR6oOtd4Swdk/view?usp/",
-              ['steady@steadystudios.org'],
+              ["steady@steadystudios.org"],
               "year-2023-part2"
             )
           }

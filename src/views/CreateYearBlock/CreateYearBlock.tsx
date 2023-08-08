@@ -2,6 +2,7 @@ import Layout from "components/Layout";
 import React, { useState } from "react";
 import { BsCardImage } from "react-icons/bs";
 import MintYearBlockComponent from "components/flow/mint-yearblock";
+import PrepareAccountYearBlock from "components/flow/prepare-account-yearblock";
 
 function CreateYearBlock() {
   const [activeTab, setActiveTab] = useState("create-new");
@@ -174,8 +175,8 @@ function CreateYearBlock() {
                 </div>
               </div>
               <div className="w-full flex items-center gap-x-5">
-                <MintYearBlockComponent />
-                {/* <button className="buttonPrimary">Mint YearBlocks</button> */}
+                <PrepareAccountYearBlock buttonStyle={"buttonPrimary"} />
+                <MintYearBlockComponent buttonStyle={"buttonPrimary"} />
               </div>
             </div>
           </div>

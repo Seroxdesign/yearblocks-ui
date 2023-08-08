@@ -3,13 +3,13 @@ import { useState } from "react";
 import OverlayLoading from "components/OverlayLoading";
 
 fcl.authenticate();
-function AttachSignatureToYearBlockComponent() {
+function AttachSignatureToYearBlockComponent({ className }) {
   const [loading, setLoading] = useState(false);
 
   //Need ID of existing YearBlock NFT, Need ID of existing Signature
   async function attachSignatureToYearBlockNFT(signatureID, yearblockID) {
     const user = fcl.currentUser().authorization;
-    console.log(user, "user")
+    console.log(user, "user");
     setLoading(true);
     try {
       const res = await fcl.mutate({
@@ -58,7 +58,7 @@ function AttachSignatureToYearBlockComponent() {
         limit: 999,
       });
       const transaction = await fcl.tx(res).onceSealed();
-      console.log(transaction, "transaction",  fcl.currentUser);
+      console.log(transaction, "transaction", fcl.currentUser);
     } catch (error) {
       console.log("err", fcl.currentUser, error);
       setLoading(false);
@@ -70,11 +70,11 @@ function AttachSignatureToYearBlockComponent() {
       {loading && <OverlayLoading />}
       <>
         <button
-          className={buttonStyle}
+          className={className}
           onClick={() =>
             attachSignatureToYearBlockNFT(
               3, //signatureID
-              3, //yearblockID
+              3 //yearblockID
             )
           }
         >

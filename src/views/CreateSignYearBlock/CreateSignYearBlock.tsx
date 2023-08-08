@@ -2,6 +2,7 @@ import Layout from "components/Layout";
 import React, { useState } from "react";
 import Image from "next/image";
 import { BsCardImage } from "react-icons/bs";
+import AttachSignatureToYearBlockComponent from "components/flow/attach-signature";
 
 function CreateSignYearBlock() {
   const [activeTab, setActiveTab] = useState("create-new");
@@ -136,7 +137,7 @@ function CreateSignYearBlock() {
                 </div>
               </div>
               <div className="w-full flex items-center gap-x-5">
-                <button className="buttonPrimary">Sign YearBlock</button>
+                <AttachSignatureToYearBlockComponent className="buttonPrimary" />
               </div>
             </div>
           </div>

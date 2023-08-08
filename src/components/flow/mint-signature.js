@@ -3,13 +3,13 @@ import { useState } from "react";
 import OverlayLoading from "components/OverlayLoading";
 
 fcl.authenticate();
-function MintSignatureComponent() {
+function MintSignatureComponent({ className }) {
   const [loading, setLoading] = useState(false);
 
   //Id should be a unique number, comment is a string, link is a string url to an img of a signature, name is a string
   async function mintSignatureNFT(id, comment, link, name) {
     const user = fcl.currentUser().authorization;
-    console.log(user, "user")
+    console.log(user, "user");
     setLoading(true);
     try {
       const res = await fcl.mutate({
@@ -49,7 +49,7 @@ function MintSignatureComponent() {
         limit: 999,
       });
       const transaction = await fcl.tx(res).onceSealed();
-      console.log(transaction, "transaction",  fcl.currentUser);
+      console.log(transaction, "transaction", fcl.currentUser);
     } catch (error) {
       console.log("err", fcl.currentUser, error);
       setLoading(false);
@@ -61,12 +61,12 @@ function MintSignatureComponent() {
       {loading && <OverlayLoading />}
       <>
         <button
-          className={buttonStyle}
+          className={className}
           onClick={() =>
             mintSignatureNFT(
               3,
               "Beautiful yearblock you have there",
-              'https://i.imgur.com/7FkSPHg.jpg',
+              "https://i.imgur.com/7FkSPHg.jpg",
               "Sero"
             )
           }
