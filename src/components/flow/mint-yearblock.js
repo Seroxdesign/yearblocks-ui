@@ -1,5 +1,6 @@
 import * as fcl from "@onflow/fcl";
 import { useState } from "react";
+import { toast } from "react-toastify";
 import OverlayLoading from "components/OverlayLoading";
 
 // id = 1 type number
@@ -54,9 +55,15 @@ function MintYearBlockComponent({ className = "buttonPrimary" }) {
       const transaction = await fcl.tx(res).onceSealed();
       console.log(transaction, "transaction", fcl.currentUser);
       setLoading(false);
+      toast("Transaction Successfully!", {
+        type: "success",
+      });
     } catch (error) {
       console.log("err", fcl.currentUser, error);
       setLoading(false);
+      toast("Something is wrong. Try again", {
+        type: "error",
+      });
     }
   }
 

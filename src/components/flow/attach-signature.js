@@ -1,5 +1,6 @@
 import * as fcl from "@onflow/fcl";
 import { useState } from "react";
+import { toast } from "react-toastify";
 import OverlayLoading from "components/OverlayLoading";
 
 fcl.authenticate();
@@ -58,9 +59,16 @@ function AttachSignatureToYearBlockComponent({ className }) {
         limit: 999,
       });
       const transaction = await fcl.tx(res).onceSealed();
+      setLoading(false);
+      toast("Transaction Successfully!", {
+        type: "success",
+      });
       console.log(transaction, "transaction", fcl.currentUser);
     } catch (error) {
       console.log("err", fcl.currentUser, error);
+      toast("Something is wrong. Try again", {
+        type: "error",
+      });
       setLoading(false);
     }
   }
