@@ -46,9 +46,9 @@ function PrepareAccountSignature({ className = "buttonPrimary" }) {
         `,
       });
       fcl.tx(res).subscribe((res) => {
-        console.log(res);
+        console.log("prepare account signature res...", res);
         if (res.status === 4 && res.errorMessage === "") {
-          toast("Flovatar NFT Minted!", {
+          toast("Account is ready to mint a Signature!", {
             type: "success",
           });
           setLoading(false);
