@@ -60,7 +60,7 @@ function AttachSignatureToYearBlockComponent({ className }) {
       });
       const transaction = await fcl.tx(res).onceSealed();
       setLoading(false);
-      toast("Transaction Successfully!", {
+      toast("Signature/Comment has been added!", {
         type: "success",
       });
       console.log(transaction, "transaction", fcl.currentUser);

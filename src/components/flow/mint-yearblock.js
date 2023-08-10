@@ -55,7 +55,7 @@ function MintYearBlockComponent({ className = "buttonPrimary" }) {
       const transaction = await fcl.tx(res).onceSealed();
       console.log(transaction, "transaction", fcl.currentUser);
       setLoading(false);
-      toast("Transaction Successfully!", {
+      toast("YearBlock Created!", {
         type: "success",
       });
     } catch (error) {

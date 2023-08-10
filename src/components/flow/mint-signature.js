@@ -51,7 +51,7 @@ function MintSignatureComponent({ className }) {
       });
       const transaction = await fcl.tx(res).onceSealed();
       setLoading(false);
-      toast("Transaction Successfully!", {
+      toast("Signature Created!", {
         type: "success",
       });
       console.log(transaction, "transaction", fcl.currentUser);
