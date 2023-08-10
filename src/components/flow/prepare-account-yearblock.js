@@ -45,7 +45,7 @@ function PrepareAccountYearBlock({ className = "buttonPrimary" }) {
       fcl.tx(res).subscribe((res) => {
         console.log("prepare-account-yearblock res...", res);
         if (res.status === 4 && res.errorMessage === "") {
-          toast("Flovatar NFT Minted!", {
+          toast("Your account is ready to create YearBlocks!", {
             type: "success",
           });
           setLoading(false);

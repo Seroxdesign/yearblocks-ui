@@ -38,11 +38,11 @@ const userLinks = [
     link: routes.createYearBlock,
   },
   {
-    label: "Create Sign YearBlocks",
+    label: "Create Signature",
     link: routes.createSignYearBlock,
   },
   {
-    label: "Create New DigiSigs",
+    label: "Sign YearBlocks",
     link: routes.createDigiSigns,
   },
 ];
