@@ -22,11 +22,11 @@ function MintYearBlockComponent({ className = "buttonPrimary" }) {
             import NonFungibleToken from 0x770b3ddf7db51dd1
             
             transaction (id: UInt64, link: String, allowList: [String], name: String) {
-            
+
               let collectionRef: &{YearBlocks.CollectionPublic}
             
               prepare(signer: AuthAccount) {
-                // Get a reference to the signer''s YearBlocks Collection
+                // Get a reference to the signer's YearBlocks Collection
                 self.collectionRef = signer.getCapability<&{YearBlocks.CollectionPublic}>(
                   YearBlocks.CollectionPublicPath
                 ).borrow()
