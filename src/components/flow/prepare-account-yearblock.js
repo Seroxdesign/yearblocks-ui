@@ -5,7 +5,6 @@ import { toast } from "react-toastify";
 
 function PrepareAccountYearBlock({ className = "buttonPrimary" }) {
   const [loading, setLoading] = useState(false);
-
   async function prepare() {
     setLoading(true);
     try {
@@ -64,16 +63,9 @@ function PrepareAccountYearBlock({ className = "buttonPrimary" }) {
     <>
       {loading && <OverlayLoading />}
       <div>
-        {/* <input
-        type="file"
-        accept="image/png, image/jpeg"
-        onChange={e => uploadImg(e)}
-        style={{ padding: '1em' }}
-      /> */}
         <button onClick={() => prepare()} className={className}>
           Prepare Your Account
         </button>
-        {/*     <img src={imgData} alt="NFT" style={{ marginTop: '2em' }} /> */}
       </div>
     </>
   );

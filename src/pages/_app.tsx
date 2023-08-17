@@ -1,5 +1,6 @@
 import "styles/globals.css";
 import type { AppProps } from "next/app";
+import { SessionProvider } from "next-auth/react";
 import Head from "next/head";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
@@ -25,7 +26,9 @@ export default function App({ Component, pageProps }: AppProps) {
         position="top-center"
         className="toast-container"
       />
-      <Component {...pageProps} />
+      <SessionProvider session={pageProps.session}>
+        <Component {...pageProps} />
+      </SessionProvider>
     </>
   );
 }
