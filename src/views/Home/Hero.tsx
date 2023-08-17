@@ -24,43 +24,15 @@ function Hero() {
               lasting memories.
             </div>
             <div className="flex items-center justify-center lg:justify-start gap-x-0 sm:gap-x-3 lg:gap-x-5">
-              <button className="buttonPrimary">Claim my YearBlock</button>
+              <Link href="/create-yearblock" className="buttonPrimary">
+                Claim my YearBlock
+              </Link>
             </div>
           </div>
           <div
             className="bgImage min-h-[250px] sm:min-h-[320px] max-w-[650px]"
             style={{ backgroundImage: `url(/images/homeHero.webp)` }}
           ></div>
-        </div>
-      </div>
-    </div>
-  );
-
-  return (
-    <div className="w-full relative">
-      <div className="w-full h-10 bg-service-900 flex items-center justify-center">
-        <Link href="/" className="font-semibold text-base text-white underline">
-          ORDER TODAY!
-        </Link>
-      </div>
-      <div
-        className="bgImage flex justify-center"
-        style={{ backgroundImage: `url(/images/homeHero.jpeg)` }}
-      >
-        <div className="margins w-full max-w-8xl">
-          <div className="w-full lg:w-[60%] xl:w-[42%] bg-white p-8 xl:p-12 my-36">
-            <div className="font-bold text-4xl lg:text-6xl leading-[50px] lg:leading-[80px] text-service-900 mb-3 lg:mb-4">
-              Introducing YearBlocks
-            </div>
-            <div className="text-sm lg:text-base text-service-700 mb-8 xl:mb-12">
-              At lacus vitae nulla sagittis scelerisque nisl. Pellentesque duis
-              cursus vestibulum, facilisi ac, sed faucibus.
-            </div>
-            <div className="flex items-center gap-x-3 lg:gap-x-5">
-              <button className="buttonPrimary">Primary button</button>
-              <button className="buttonTransparent">Tertiary button</button>
-            </div>
-          </div>
         </div>
       </div>
     </div>

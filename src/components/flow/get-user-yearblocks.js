@@ -4,14 +4,14 @@ import { toast } from "react-toastify";
 import OverlayLoading from "components/OverlayLoading";
 
 fcl.authenticate();
-function ViewYearblock() {
+function ViewYearblock(className = "buttonPrimary") {
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState({ loggedIn: false, addr: undefined })
+  const [user, setUser] = useState({ loggedIn: false, addr: undefined });
 
-	useEffect(() => {
+  useEffect(() => {
     fcl.currentUser.subscribe(setUser);
   }, [user.addr]);
-  console.log(user.addr)
+  console.log(user.addr);
   //user address
   async function displayYearblock(addr) {
     setLoading(true);
@@ -51,7 +51,7 @@ function ViewYearblock() {
             
                 return nftDataMap
             }`,
-          args: (arg, t) => [arg(user.addr, t.Address)],
+        args: (arg, t) => [arg(user.addr, t.Address)],
       });
       console.log(res);
     } catch (error) {
@@ -67,11 +67,7 @@ function ViewYearblock() {
     <>
       {loading && <OverlayLoading />}
       <>
-        <button
-          onClick={() =>
-            displayYearblock()
-          }
-        >
+        <button onClick={() => displayYearblock()} className={className}>
           View Yearblock
         </button>
       </>

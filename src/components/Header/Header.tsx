@@ -6,7 +6,7 @@ import routes from "routes";
 import * as fcl from "@onflow/fcl";
 import { Menu, Transition } from "@headlessui/react";
 import "flow/config";
-// import { config } from "@onflow/fcl";
+import { useSession, signOut } from "next-auth/react";
 
 export interface HeaderType {
   title: string;
@@ -50,6 +50,7 @@ const userLinks = [
 function Header() {
   const [expend, setExpend] = useState(false);
   const [user, setUser] = useState({ loggedIn: null, addr: null });
+  const { data: session, status } = useSession();
 
   useEffect(() => {
     fcl.currentUser.subscribe(setUser);
@@ -63,25 +64,30 @@ function Header() {
     }
   }, [expend]);
 
-  const handleLoginButton = () => {
-    setExpend(false);
-    fcl.logIn();
-  };
-
   const handleSignUpButton = () => {
     setExpend(false);
     fcl.signUp();
   };
 
+  const handleLogoutButton = () => {
+    signOut();
+    fcl.unauthenticate();
+  };
+
   const UserMenu = ({ buttonClassName }: { buttonClassName?: string }) => (
     <div className="relative">
       <Menu as="div">
-        <div>
-          <Menu.Button className={`buttonHole ${buttonClassName}`}>
-            {user.addr}
-            <IoIosArrowDown className="ml-2 -mr-1 h-5 w- text-primary-700" />
-          </Menu.Button>
-        </div>
+        <Menu.Button className="flex items-center cursor-pointer">
+          <div
+            className="bgImage !h-[46px] !w-[46px] rounded-full  bg-gray-100"
+            style={{ backgroundImage: `url(${session?.user?.image})` }}
+          ></div>
+          <div className="px-2 text-base font-semibold text-service-900">
+            {session?.user?.name}
+          </div>
+          <IoIosArrowDown className="-ml-1 h-5 w-5 text-service-900" />
+        </Menu.Button>
+
         <Transition
           as={Fragment}
           enter="transition ease-out duration-100"
@@ -91,7 +97,27 @@ function Header() {
           leaveFrom="transform opacity-100 scale-100"
           leaveTo="transform opacity-0 scale-95"
         >
-          <Menu.Items className="w-full min-w-56 absolute left-0 right-0 mt-2  origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+          <Menu.Items className="min-w-[240px] w-full min-w-56 absolute right-0 mt-2  origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+            <div className="px-2 py-2">
+              <Menu.Item>
+                {({ active }) => (
+                  <>
+                    {user?.loggedIn && user?.addr ? (
+                      <button className="w-full py-2 px-2 border-solid border-[1px] border-primary-700 text-primary-700 text-base rounded-full">
+                        {user?.addr}
+                      </button>
+                    ) : (
+                      <button
+                        className="w-full py-2 px-2 border-solid border-[1px] border-primary-700 text-primary-700 text-base rounded-full"
+                        onClick={handleSignUpButton}
+                      >
+                        Connect Wallet
+                      </button>
+                    )}
+                  </>
+                )}
+              </Menu.Item>
+            </div>
             <div className="px-1 py-1">
               {userLinks.map((item, index) => (
                 <Menu.Item key={index}>
@@ -102,7 +128,7 @@ function Header() {
                         active
                           ? "bg-primary-700 text-white"
                           : "text-service-900"
-                      } group flex w-full items-center rounded-md px-3.5 py-2 text-base`}
+                      } group flex w-full items-center rounded-md px-3.5 py-2 text-base animation`}
                     >
                       {item.label}
                     </Link>
@@ -113,14 +139,22 @@ function Header() {
             <div className="px-1 py-1">
               <Menu.Item>
                 {({ active }) => (
-                  <button
-                    className={`${
-                      active ? "bg-primary-700 text-white" : "text-gray-900"
-                    } group flex w-full items-center rounded-md px-3.5 py-2 text-base`}
-                    onClick={() => fcl.unauthenticate()}
-                  >
-                    Logout
-                  </button>
+                  <>
+                    {user?.loggedIn && user?.addr && (
+                      <button
+                        className={`group flex w-full items-center rounded-md px-3.5 py-2 text-base text-gray-900 hover:text-white hover:bg-primary-700`}
+                        onClick={() => fcl.unauthenticate()}
+                      >
+                        Disconnect Wallet
+                      </button>
+                    )}
+                    <button
+                      className={`group flex w-full items-center rounded-md px-3.5 py-2 text-base text-gray-900 hover:text-white hover:bg-primary-700`}
+                      onClick={handleLogoutButton}
+                    >
+                      Logout
+                    </button>
+                  </>
                 )}
               </Menu.Item>
             </div>
@@ -155,21 +189,15 @@ function Header() {
               ))}
             </div>
           </div>
-          {user.loggedIn && user.addr ? (
+          {session?.user ? (
             <div className="flex items-center gap-x-4">
               <UserMenu />
             </div>
           ) : (
             <div className="flex items-center gap-x-6 xl:gap-x-8">
-              <button
-                onClick={handleLoginButton}
-                className="animation text-base font-semibold text-service-900 hover:text-primary-700"
-              >
-                Login
-              </button>
-              <button onClick={handleSignUpButton} className="buttonPrimary">
-                Get Started
-              </button>
+              <Link href={"/login"} className="buttonPrimary">
+                Login / Sign Up
+              </Link>
             </div>
           )}
         </div>
@@ -234,32 +262,23 @@ function Header() {
                   </div>
                 </Link>
               ))}
-              {user.loggedIn && user.addr ? (
+              {session?.user ? (
                 <>
                   <UserMenu buttonClassName="!text-2xl !font-semibold" />
                   <button
-                    onClick={fcl.unauthenticate}
+                    onClick={handleLogoutButton}
                     className="w-full buttonPrimary !text-2xl !font-semibold"
                   >
                     Logout
                   </button>
                 </>
               ) : (
-                <>
-                  <button
-                    onClick={handleLoginButton}
-                    className="animation text-service-900 text-2xl font-semibold cursor-pointer hover:text-primary-700"
-                  >
-                    Login
-                  </button>
-
-                  <button
-                    onClick={handleSignUpButton}
-                    className="w-full buttonPrimary !text-2xl !font-semibold"
-                  >
-                    Get Started
-                  </button>
-                </>
+                <Link
+                  href={"/login"}
+                  className="animation text-service-900 text-2xl font-semibold cursor-pointer hover:text-primary-700"
+                >
+                  Login / Sign Up
+                </Link>
               )}
             </div>
           </div>

@@ -1,7 +1,22 @@
+import type {
+  GetServerSidePropsContext,
+  InferGetServerSidePropsType,
+} from "next";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/router";
+import { getServerSession } from "next-auth/next";
+import { useSession, getProviders, signIn } from "next-auth/react";
+import { authOptions } from "../../pages/api/auth/[...nextauth]";
 
 function Login() {
+  const router = useRouter();
+  const { data: session, status } = useSession();
+
+  if (session?.user) {
+    router.push("/");
+  }
+
   return (
     <div className="flex min-h-screen flex-1">
       <div className="flex flex-1 flex-col px-5 py-10 sm:px-6 lg:flex-none lg:px-24 xl:px-20">
@@ -28,7 +43,10 @@ function Login() {
             </div>
 
             <div className="mt-10">
-              <button className="flex w-full items-center justify-center gap-3 rounded-md animation bg-blue-600 hover:bg-blue-700 px-3 py-1.5 h-[44px] text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1D9BF0]">
+              <button
+                className="flex w-full items-center justify-center gap-3 rounded-md animation bg-blue-600 hover:bg-blue-700 px-3 py-1.5 h-[44px] text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1D9BF0]"
+                onClick={() => signIn("google")}
+              >
                 <div className="flex items-center justify-center h-full w-8 bg-white rounded-[7px]">
                   <Image
                     src="/images/google.svg"
@@ -62,3 +80,20 @@ function Login() {
 }
 
 export default Login;
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  const session = await getServerSession(context.req, context.res, authOptions);
+
+  // If the user is already logged in, redirect.
+  // Note: Make sure not to redirect to the same page
+  // To avoid an infinite loop!
+  if (session) {
+    return { redirect: { destination: "/" } };
+  }
+
+  const providers = await getProviders();
+
+  return {
+    props: { providers: providers ?? [] },
+  };
+}
