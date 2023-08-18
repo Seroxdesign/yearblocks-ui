@@ -57,10 +57,10 @@ async function prepareAccountYearBlock({ setLoading }) {
 }
 
 // id = 1 type number
-// thumbnail = https://drive.google.com/file/d/1ahYRs7qeKMRgZwXMokaGYR6oOtd4Swdk/view?usp
 // allowList = []
-// media = https://bafybeicov5maw7ztte6rz6inrlovmkcpxfsbej3ohqvqk7ycv2hxlsbd5m.ipfs.nftstorage.link/
 // name = 'year-2023' type string
+// thumbnail = https://drive.google.com/file/d/1ahYRs7qeKMRgZwXMokaGYR6oOtd4Swdk/view?usp
+// link/media = https://bafybeicov5maw7ztte6rz6inrlovmkcpxfsbej3ohqvqk7ycv2hxlsbd5m.ipfs.nftstorage.link/
 
 async function mintYearBlockNFT({ setLoading, id, link, allowList, name }) {
   const user = fcl.currentUser().authorization;
@@ -118,4 +118,57 @@ async function mintYearBlockNFT({ setLoading, id, link, allowList, name }) {
   }
 }
 
-export { mintYearBlockNFT, prepareAccountYearBlock };
+// Get User YearBlocks
+async function getUserYearBlock({ setLoading, addr }) {
+  setLoading(true);
+  try {
+    const res = await fcl.query({
+      cadence: `
+          import YearBlocks from 0x770b3ddf7db51dd1
+          import NonFungibleToken from 0x770b3ddf7db51dd1
+
+          pub struct MetaDataStruct {
+            pub var name: String?
+            pub var allowList: [String]?
+            pub var link: String?
+          
+            init(_ id: UInt64, _ NFT: &YearBlocks.NFT?) {
+          
+              self.name = NFT?.getName()
+              self.allowList = NFT?.getAllowList()
+              self.link = NFT?.getLink()
+            }
+          }
+          /// This script returns the IDs of the KittyVerse NFTs in the Collection of the given Address
+          ///
+          pub fun main(address: Address): {UInt64: MetaDataStruct} {
+          
+              var nftDataMap: {UInt64: MetaDataStruct} = {}
+              // Get a reference to the CollectionPublic Capability from the specified Address
+              let collectionPublicRef = getAccount(address).getCapability<&{YearBlocks.CollectionPublic}>(
+                YearBlocks.CollectionPublicPath 
+              ).borrow()
+              ?? panic("Couldn't find CollectionPublic Capability at given Address!")
+              let ids = collectionPublicRef.getIDs()
+              for id in ids {
+                let NFT: &YearBlocks.NFT? = collectionPublicRef.borrowYearBlockNFT(id: id)
+                nftDataMap[id] = MetaDataStruct(id, NFT)
+              }
+          
+              return nftDataMap
+          }`,
+      args: (arg, t) => [arg(addr, t.Address)],
+    });
+    setLoading(false);
+    return res;
+  } catch (error) {
+    setLoading(false);
+    console.log("get user YearBlock error...", error);
+    toast("Something is wrong. Try again", {
+      type: "error",
+    });
+    return [];
+  }
+}
+
+export { mintYearBlockNFT, prepareAccountYearBlock, getUserYearBlock };

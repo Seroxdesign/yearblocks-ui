@@ -14,7 +14,7 @@ function YearBlockCard({ data }: { data: YearBlockCardTypes }) {
       <a href={data.link} target="_blank" className="w-full flex flex-col">
         <div
           className="bgImage !h-[250px]  md:!h-[270px] mb-3 lg:mb-5"
-          style={{ backgroundImage: `url(${data.image})` }}
+          style={{ backgroundImage: `url(${data.link})` }}
         />
         <div className="font-bold text-lg lg:text-[22px] leading-7 lg:leading-8 mb-1 lg:mb-3 text-center">
           {data.name}
@@ -29,7 +29,7 @@ function YearBlockCard({ data }: { data: YearBlockCardTypes }) {
     <Link href={data.link} className="w-full flex flex-col">
       <div
         className="bgImage !h-[250px]  md:!h-[270px] mb-3 lg:mb-5"
-        style={{ backgroundImage: `url(${data.image})` }}
+        style={{ backgroundImage: `url(${data.link})` }}
       />
       <div className="font-bold text-lg lg:text-[22px] leading-7 lg:leading-8 mb-1 lg:mb-3 text-center">
         {data.name}
