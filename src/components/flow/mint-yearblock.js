@@ -1,9 +1,7 @@
-import * as fcl from "@onflow/fcl";
 import { useState } from "react";
 import OverlayLoading from "components/OverlayLoading";
 import { mintYearBlockNFT } from "utils/flow";
 
-fcl.authenticate();
 function MintYearBlockComponent({
   className = "buttonPrimary",
   uniqueId,
