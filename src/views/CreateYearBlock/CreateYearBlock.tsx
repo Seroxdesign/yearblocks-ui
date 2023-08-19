@@ -135,11 +135,6 @@ function CreateYearBlock() {
       toast("Please login first", {
         type: "error",
       });
-    } else if (!currentUser?.loggedIn) {
-      toast("Please first prepare your account", {
-        type: "error",
-      });
-      prepareAccountYearBlock({ setLoading });
     } else if (!values.yearBlockName) {
       toast("YearBlock name is required", {
         type: "error",
@@ -148,6 +143,11 @@ function CreateYearBlock() {
       toast("Please Upload Front Cover", {
         type: "error",
       });
+    } else if (!currentUser?.loggedIn) {
+      toast("Please first prepare your account", {
+        type: "error",
+      });
+      prepareAccountYearBlock({ setLoading });
     } else {
       setLoading(true);
       uploadFileIntoDatabase(currentUser);
@@ -332,7 +332,7 @@ function CreateYearBlock() {
                     <img
                       src={window.URL.createObjectURL(file)}
                       alt="image"
-                      className="mt-5 h-[280px] w-[280px] object-contain"
+                      className="mt-8 w-[280px] object-contain"
                     />
                   )}
                 </div>
