@@ -1,6 +1,8 @@
 import NextAuth, { type NextAuthOptions } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 
+// TODO: To change the clientId and clientSecret with env variables
+
 export const authOptions: NextAuthOptions = {
   theme: {
     colorScheme: "light",
