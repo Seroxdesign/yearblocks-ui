@@ -156,9 +156,12 @@ async function getUserYearBlock({ setLoading, addr }) {
             pub var name: String?
             pub var allowList: [String]?
             pub var link: String?
+            pub var description: String?
+            pub var thumbnail: String?
           
             init(_ id: UInt64, _ NFT: &YearBlocks.NFT?) {
-          
+              self.description = NFT?.getDescription()
+              self.thumbnail = NFT?.getThumbnail()
               self.name = NFT?.getName()
               self.allowList = NFT?.getAllowList()
               self.link = NFT?.getLink()
@@ -311,15 +314,17 @@ async function mintSignatureNFT({ setLoading, id, comment, link, name }) {
 
 async function attachSignatureToYearblock({
   setLoading,
-  signatureId,
-  yearblockId,
+  signatureID,
+  yearblockID,
 }) {
+  console.log(signatureID, yearblockID, setLoading)
   const user = fcl.currentUser().authorization;
   console.log(user, "user");
   setLoading(true);
   try {
     const res = await fcl.mutate({
       cadence: `
+            import YearBlocks from 0x24a3cbe995e718ff
             import Signatures from 0x24a3cbe995e718ff
             import NonFungibleToken from 0x24a3cbe995e718ff
             
@@ -344,7 +349,7 @@ async function attachSignatureToYearblock({
                   let YearBlocksNFT: @YearBlocks.NFT <- self.yearblocksCollectionRef.withdraw(withdrawID: yearblockID) as! @YearBlocks.NFT
           
                   // Put the signature on the yearblock
-                  let yearblockWithSignature: @NonFungibleToken.NFT <- self.signaturesCollectionRef.attachSignatureToYearBlock(signatureId: signatureID, toYearBlocks: <- YearBlocksNFT)
+                  let yearblockWithSignature: @YearBlocks.NFT <- self.signaturesCollectionRef.attachSignatureToYearBlock(signatureId: signatureID, toYearBlocks: <- YearBlocksNFT)
           
                   // Deposit the yearblock into it's storage ref
                   self.yearblocksCollectionRef.deposit(token: <- yearblockWithSignature)
@@ -352,8 +357,8 @@ async function attachSignatureToYearblock({
           }`,
 
       args: (arg, t) => [
-        arg(signatureId, t.UInt64),
-        arg(yearblockId, t.UInt64),
+        arg(signatureID, t.UInt64),
+        arg(yearblockID, t.UInt64),
       ],
       proposer: user,
       payer: user,
@@ -367,7 +372,7 @@ async function attachSignatureToYearblock({
     });
     console.log(transaction, "transaction", fcl.currentUser);
   } catch (error) {
-    console.log("err", fcl.currentUser, error);
+    console.log("err", fcl.currentUser, error, signatureID, yearblockID);
     setLoading(false);
     toast("Something is wrong. Try again", {
       type: "error",
@@ -494,35 +499,47 @@ async function getUserUnattachedSignatures({ setLoading, addr }) {
   try {
     const res = await fcl.query({
       cadence: `
-          import YearBlocks from 0x24a3cbe995e718ff
+          import Signatures from 0x24a3cbe995e718ff
           import NonFungibleToken from 0x24a3cbe995e718ff
 
-          pub fun main(address: Address): {UInt64: String?} {
-    
-            var idsToComments: {UInt64: String?} = {}
-            // Get a reference to the CollectionPublic Capability from the specified Address
-            let signaturesCollectionRef = getAccount(address).getCapability<&{Signatures.CollectionPublic}>(
-                Signatures.CollectionPublicPath
-            ).borrow() ?? panic("Couldn't find CollectionPublic Capability at given Address!")
-        
-            // Return the IDs of the NFTs in the KittyHats Collection
-            let ids = signaturesCollectionRef.getIDs()
-            for id in ids {
-                let NFT: &Signatures.NFT? = signaturesCollectionRef.borrowSignatureNFT(id: id)
-                let comment: String? = NFT?.getSignatureComment()
-                idsToComments.insert(key: id, comment)
+          pub struct MetaDataStruct {
+            pub var name: String?
+            pub var comment: String?
+            pub var signature: String?
+           
+            init(_ NFT: &Signatures.NFT?) {
+              self.name = NFT?.getSignatureName()
+              self.comment = NFT?.getSignatureComment()
+              self.signature = NFT?.getSignature()
             }
-        
-            // Return the final mapping
-            return idsToComments
-        }`,
+          }
+          
+          pub fun main(address: Address): {UInt64: MetaDataStruct?} {
+              
+              var nftDataMap: {UInt64: MetaDataStruct?} = {}
+              // Get a reference to the CollectionPublic Capability from the specified Address
+              let signaturesCollectionRef = getAccount(address).getCapability<&{Signatures.CollectionPublic}>(
+                  Signatures.CollectionPublicPath
+              ).borrow() ?? panic("Couldn't find CollectionPublic Capability at given Address!")
+          
+              // Return the IDs of the NFTs in the KittyHats Collection
+              let ids = signaturesCollectionRef.getIDs()
+              for id in ids {
+                  let NFT: &Signatures.NFT? = signaturesCollectionRef.borrowSignatureNFT(id: id)
+                  let comment: String? = NFT?.getSignatureComment()
+                  nftDataMap[id] = MetaDataStruct(NFT)
+              }
+          
+              // Return the final mapping
+              return nftDataMap
+          }`,
       args: (arg, t) => [arg(addr, t.Address)],
     });
     setLoading(false);
     return res;
   } catch (error) {
     setLoading(false);
-    console.log("get user unattached signatures error...", error);
+    console.log("get user unattached signatures error...", error, addr);
     toast("Something is wrong. Try again", {
       type: "error",
     });
@@ -552,10 +569,10 @@ async function getYearBlocksSignatures({ setLoading, addr }) {
             }
           }
           
-          pub fun main(address: Address): {String: [MetaDataStruct]?} {
+          pub fun main(address: Address):{String: [MetaDataStruct]?} {
           
               // Assign a return mapping
-              let yearblocksAndSignatures: {String: [MetaDataStruct]} = {"start": []}
+              let yearblocksAndSignatures:{String: [MetaDataStruct]} = {"start": []}
               
               // Get a reference to the CollectionPublic Capability from the specified Address
               let collectionPublicRef = getAccount(address).getCapability<&{YearBlocks.CollectionPublic}>(
@@ -570,19 +587,21 @@ async function getYearBlocksSignatures({ setLoading, addr }) {
                   var sig: String? = nil
                   // Reference the KittyHats attachment if there is one
                   if let attachment = yearblockNFTRef[Signatures.SignatureAttachment] {
+                  // Get the name of the hat in the attachment if one exists
+                  yearblocksAndSignatures[name] = []
+                  if let attachment = yearblockNFTRef[Signatures.SignatureAttachment] {
                       // Get the name of the hat in the attachment if one exists
-                      for _id in attachment.getIDsFromAttachment() {
-                          let sig: &Signatures.NFT? = attachment.borrowSignature(id: _id)
-                          yearblocksAndSignatures[name] = []
-                          yearblocksAndSignatures[name]?.append(MetaDataStruct(sig))
-                      }
+                    for _id in attachment.getIDsFromAttachment() {
+                        let sig: &Signatures.NFT? = attachment.borrowSignature(id: _id) 
+                        yearblocksAndSignatures[name]?.append(MetaDataStruct(sig))
+                    }
                   }
-                  // Add the values to the mapping
-            
+                  }
               }
           
               // Return the final mapping
               return yearblocksAndSignatures
+          
           }`,
       args: (arg, t) => [arg(addr, t.Address)],
     });

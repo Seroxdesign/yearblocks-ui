@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Layout from "components/Layout";
 import YearsList from "./YearsList";
-import { getUserYearBlock, getUserUnattachedSignatures } from "utils/flow";
+import { getUserYearBlock, getUserUnattachedSignatures, getYearBlocksSignatures } from "utils/flow";
 import * as fcl from "@onflow/fcl";
 
 function MyYearBlock() {
@@ -18,6 +18,12 @@ function MyYearBlock() {
       setLoading,
       addr: user.addr,
     });
+    //get yearblocks and signatures
+    const response2 = getYearBlocksSignatures({
+      setLoading,
+      addr: user.addr,
+    })
+    console.log(response, response2)
     let newArray = [];
     for (const key in response) {
       if (response.hasOwnProperty(key)) {
