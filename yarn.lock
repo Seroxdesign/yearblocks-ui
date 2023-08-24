@@ -545,6 +545,11 @@
     deepmerge "^4.2.2"
     sha3 "^2.1.4"
 
+"@onflow/six-create-account@^0.0.10":
+  version "0.0.10"
+  resolved "https://registry.yarnpkg.com/@onflow/six-create-account/-/six-create-account-0.0.10.tgz#776fd013d4455a023227caa8a66a6cc63de35577"
+  integrity sha512-+s/YhyiGH9LNa46QK60o9ws5J2NWr5StJnxqJTIfYPOzz8UIrEf7cptCkMEtiMw8x+XYwwnLJr3W90/vjr5KYA==
+
 "@onflow/transport-http@^1.6.0":
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/@onflow/transport-http/-/transport-http-1.6.0.tgz#cc6661286dcf70f931b80be57ab2a3831be408c1"
