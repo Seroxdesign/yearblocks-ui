@@ -13,10 +13,12 @@ function CreateYearBlock() {
   const { data: session, status } = useSession();
   const [activeTab, setActiveTab] = useState("create-new");
   const [loading, setLoading] = useState(false);
-  const [file, setFile] = useState<any | null>(null);
+  const [thumbnail, setThumbnail] = useState<any | null>(null);
   const [values, setValues] = useState({
     yearBlockName: "",
     whiteList: "",
+    description: "",
+    link: "",
     districtName: "",
     schoolName: "",
     schoolYear: "",
@@ -44,12 +46,14 @@ function CreateYearBlock() {
     setValues({
       ...values,
       yearBlockName: "",
+      description: "",
+      link: "",
       whiteList: "",
       districtName: "",
       schoolName: "",
       schoolYear: "",
     });
-    setFile(null);
+    setThumbnail(null);
   };
 
   const handleImagePick = (event: any) => {
@@ -59,14 +63,14 @@ function CreateYearBlock() {
       event.target.files.length > 0
     ) {
       let file = event.target.files[0];
-      setFile(file);
+      setThumbnail(file);
     }
   };
 
   const uploadFileIntoDatabase = (currentUser: any) => {
-    if (file) {
-      const storageRef = storage.ref("images/" + file.name);
-      const uploadTask = storageRef.put(file);
+    if (thumbnail) {
+      const storageRef = storage.ref("images/" + thumbnail.name);
+      const uploadTask = storageRef.put(thumbnail);
 
       // Listen for upload progress and completion
       uploadTask.on(
@@ -87,6 +91,7 @@ function CreateYearBlock() {
             .getDownloadURL()
             .then(async (imageUrl) => {
               let uniqueId = generateNumberID(6);
+              console.log("uniqueId....", typeof uniqueId, uniqueId);
               await db
                 .collection("YearBlocks")
                 .add({
@@ -95,17 +100,29 @@ function CreateYearBlock() {
                   userAccountAddress: currentUser?.addr,
                   yearBlockID: uniqueId,
                   yearBlockName: values.yearBlockName,
-                  mediaLocation: imageUrl,
+                  yearBlockLink: values.link,
+                  yearBlockDescription: values.description,
+                  thumbnail: imageUrl,
                   allowList: [session?.user?.email],
                   timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                 })
                 .then(async () => {
+                  console.log("data....", {
+                    id: uniqueId,
+                    link: values.link,
+                    thumbnail: imageUrl,
+                    allowList: [session?.user?.email],
+                    name: values.yearBlockName,
+                    description: values.description,
+                  });
                   await mintYearBlockNFT({
                     setLoading,
                     id: uniqueId,
-                    link: imageUrl,
+                    link: values.link,
+                    thumbnail: imageUrl,
                     allowList: [session?.user?.email],
                     name: values.yearBlockName,
+                    description: values.description,
                   });
                   resetInputs();
                 })
@@ -139,7 +156,15 @@ function CreateYearBlock() {
       toast("YearBlock name is required", {
         type: "error",
       });
-    } else if (!file) {
+    } else if (!values.link) {
+      toast("YearBlock link is required", {
+        type: "error",
+      });
+    } else if (!values.description) {
+      toast("Description is required", {
+        type: "error",
+      });
+    } else if (!thumbnail) {
       toast("Please Upload Front Cover", {
         type: "error",
       });
@@ -152,6 +177,10 @@ function CreateYearBlock() {
       setLoading(true);
       uploadFileIntoDatabase(currentUser);
     }
+  };
+
+  const _prepare = () => {
+    prepareAccountYearBlock({ setLoading });
   };
 
   return (
@@ -216,6 +245,23 @@ function CreateYearBlock() {
                     htmlFor="yearbook"
                     className="text-sm sm:text-base font-semibold leading-6 text-gray-900"
                   >
+                    YearBlock Link
+                  </label>
+                  <div className="mt-2">
+                    <input
+                      type="text"
+                      name="link"
+                      value={values.link}
+                      onChange={handleInput}
+                      className="w-full rounded-md border-0 py-1.5 px-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-700 sm:text-base sm:leading-8"
+                    />
+                  </div>
+                </div>
+                <div className="w-full">
+                  <label
+                    htmlFor="yearbook"
+                    className="text-sm sm:text-base font-semibold leading-6 text-gray-900"
+                  >
                     Whitelist
                   </label>
                   <div className="mt-2">
@@ -223,6 +269,22 @@ function CreateYearBlock() {
                       type="text"
                       name="whiteList"
                       value={values.whiteList}
+                      onChange={handleInput}
+                      className="w-full rounded-md border-0 py-1.5 px-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-700 sm:text-base sm:leading-8"
+                    />
+                  </div>
+                </div>
+                <div className="w-full">
+                  <label
+                    htmlFor="yearbook"
+                    className="text-sm sm:text-base font-semibold leading-6 text-gray-900"
+                  >
+                    Description
+                  </label>
+                  <div className="mt-2">
+                    <textarea
+                      name="description"
+                      value={values.description}
                       onChange={handleInput}
                       className="w-full rounded-md border-0 py-1.5 px-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-700 sm:text-base sm:leading-8"
                     />
@@ -309,7 +371,7 @@ function CreateYearBlock() {
                               document.getElementById("fileUploadID")?.click();
                             }}
                           >
-                            {file ? "Change file" : "Upload a file"}
+                            {thumbnail ? "Change file" : "Upload a file"}
                           </div>
                           <input
                             accept="image/jpeg, image/png, image/jpg, image/webp"
@@ -328,9 +390,9 @@ function CreateYearBlock() {
                       </p>
                     </div>
                   </div>
-                  {file && typeof window !== "undefined" && (
+                  {thumbnail && typeof window !== "undefined" && (
                     <img
-                      src={window.URL.createObjectURL(file)}
+                      src={window.URL.createObjectURL(thumbnail)}
                       alt="image"
                       className="mt-8 w-[280px] object-contain"
                     />
@@ -343,6 +405,9 @@ function CreateYearBlock() {
                     disabled={loading}
                   >
                     Mint YearBlock NFT
+                  </button>
+                  <button onClick={_prepare} className="buttonPrimary">
+                    Prepare
                   </button>
                 </div>
               </div>

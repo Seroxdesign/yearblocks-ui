@@ -13,8 +13,8 @@ function PrepareAccountSignature({ className = "buttonPrimary" }) {
     try {
       const res = await fcl.mutate({
         cadence: `
-        import Signatures from 0x770b3ddf7db51dd1
-        import NonFungibleToken from 0x770b3ddf7db51dd1
+        import Signatures from 0x24a3cbe995e718ff
+        import NonFungibleToken from 0x24a3cbe995e718ff
         
         /// This transaction sets up the signer with a Signatures Collection
         ///

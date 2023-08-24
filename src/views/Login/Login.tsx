@@ -2,20 +2,64 @@ import type {
   GetServerSidePropsContext,
   InferGetServerSidePropsType,
 } from "next";
+import { useEffect, useCallback, useState } from "react";
+import * as fcl from "@onflow/fcl";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { getServerSession } from "next-auth/next";
 import { useSession, getProviders, signIn } from "next-auth/react";
-import { authOptions } from "../../pages/api/auth/[...nextauth]";
+import { authOptions } from "pages/api/auth/[...nextauth]";
+import { generateKeys } from "utils/crypto";
+import "flow/config";
+import { createAccount, prepareAccountHybridCustody } from "utils/flow";
 
 function Login() {
   const router = useRouter();
   const { data: session, status } = useSession();
+  const [loading, setLoading] = useState(false);
 
-  if (session?.user) {
-    router.push("/");
-  }
+  // if (session?.user) {
+  //   router.push("/");
+  // }
+
+  const executeScript = useCallback(
+    async (cadence: string, args: any = () => []) => {
+      try {
+        return await fcl.query({
+          cadence: cadence,
+          args,
+        });
+      } catch (error) {
+        console.log("executeScript error....", error);
+      }
+    },
+    []
+  );
+
+  const getAddress = async (adminAddress: any) => {
+    const gameAccountKeys = await generateKeys();
+    if (gameAccountKeys) {
+      const res: string = await executeScript(
+        "0x24a3cbe995e718ff",
+        (arg: any, t: any) => [
+          arg(adminAddress, t.Address),
+          arg(gameAccountKeys.publicKey, t.String),
+        ]
+      );
+      console.log("res....", res);
+    }
+  };
+
+  const handleGetWalletAddress = async () => {
+    // let adminKey =
+    //   "ee6b1013ceba221deebaaaba9bcbd6810196f0db85ef7c3c538eb0b1930be5785c413c39663b543f6ae2d69620a71539d32b6af2587534e4286aa61d2710c352";
+    // let adminAddress = fcl.withPrefix(adminKey || "");
+    // await createAccount(setLoading, adminKey, 2.5);
+    // if (adminAddress) {
+    //   getAddress(adminAddress);
+    // }
+  };
 
   return (
     <div className="flex min-h-screen flex-1">
@@ -59,6 +103,13 @@ function Login() {
                 <span className="text-sm font-semibold leading-6">
                   Sign in with Google
                 </span>
+              </button>
+
+              <button
+                className="buttonPrimary mt-8 w-full"
+                onClick={handleGetWalletAddress}
+              >
+                Get Wallet Address
               </button>
             </div>
           </div>

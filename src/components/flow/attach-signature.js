@@ -15,9 +15,9 @@ function AttachSignatureToYearBlockComponent({ className }) {
     try {
       const res = await fcl.mutate({
         cadence: `
-            import Signatures from 0x770b3ddf7db51dd1
-            import NonFungibleToken from 0x770b3ddf7db51dd1
-            import YearBlocks from 0x770b3ddf7db51dd1
+            import Signatures from 0x24a3cbe995e718ff
+            import NonFungibleToken from 0x24a3cbe995e718ff
+            import YearBlocks from 0x24a3cbe995e718ff
             
             transaction(signatureID: UInt64, yearblockID: UInt64) {
 
