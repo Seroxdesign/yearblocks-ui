@@ -15,8 +15,8 @@ function CreateSignYearBlock() {
       signatureID: 73950,
       yearblockID: 331671,
     });
-    console.log(tx, 'tx....')
-  }
+    console.log(tx, "tx....");
+  };
 
   return (
     <Layout>

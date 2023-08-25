@@ -155,9 +155,9 @@ async function getUserYearBlock({ setLoading, addr }) {
           pub struct MetaDataStruct {
             pub var name: String?
             pub var allowList: [String]?
-            pub var link: String?
+            pub var link: String?   
             pub var description: String?
-            pub var thumbnail: String?
+            pub var thumbnail: String?  
           
             init(_ id: UInt64, _ NFT: &YearBlocks.NFT?) {
               self.description = NFT?.getDescription()
@@ -317,7 +317,7 @@ async function attachSignatureToYearblock({
   signatureID,
   yearblockID,
 }) {
-  console.log(signatureID, yearblockID, setLoading)
+  console.log(signatureID, yearblockID, setLoading);
   const user = fcl.currentUser().authorization;
   console.log(user, "user");
   setLoading(true);
