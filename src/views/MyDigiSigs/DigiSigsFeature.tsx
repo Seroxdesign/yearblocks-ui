@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { getUserUnattachedSignatures} from "utils/flow";
+import { getUserUnattachedSignatures } from "utils/flow";
 import { useState, useEffect } from "react";
 import * as fcl from "@onflow/fcl";
 
@@ -35,13 +35,19 @@ function DigiSigsFeature() {
             <div className="text-sm sm:text-base leading-6 sm:leading-7 text-gray-600 mb-2">
               {`Using the platform, you can easily capture your digital signature, allowing you to personalize your YearBlocks and leave a unique mark to commemorate your school memories.`}
             </div>
-            <button onClick={getData}>data</button>
-            <Link
-              href="/create-digisigs"
-              className="buttonPrimary max-w-fit min-w-[120px]"
-            >
-              Create My DigiSigs
-            </Link>
+
+            <div className="flex items-center gap-x-4">
+              <Link href="/create-digisigs" className="buttonPrimary max-w-fit">
+                Create My DigiSigs
+              </Link>
+              <Link
+                href={`/digisigs/${user.addr}`}
+                className="buttonPrimary"
+                onClick={getData}
+              >
+                View My DigiSigs
+              </Link>
+            </div>
           </div>
         </div>
         <div className="flex items-center flex-col md:flex-row gap-y-6 md:gap-y-0 md:gap-x-8 lg:gap-x-12">

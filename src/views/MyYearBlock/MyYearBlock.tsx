@@ -1,54 +1,44 @@
+import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import Layout from "components/Layout";
+import { getUserYearBlock, getYearBlocksSignatures } from "utils/flow";
 import YearsList from "./YearsList";
-import { getUserYearBlock, getUserUnattachedSignatures, getYearBlocksSignatures } from "utils/flow";
-import * as fcl from "@onflow/fcl";
 
 function MyYearBlock() {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState({ loggedIn: false, addr: undefined });
   const [yearBlocksList, setYearBlocksList] = useState<any | []>([]);
-
-  useEffect(() => {
-    fcl.currentUser.subscribe(setUser);
-  }, [user.addr]);
 
   const getData = async () => {
     const response = await getUserYearBlock({
       setLoading,
-      addr: user.addr,
+      addr: router.query.addr,
     });
-    //get yearblocks and signatures
+
+    // TODO: What is getYearBlocksSignatures and from which form it is
+    // get YearBlocks and signatures
     const response2 = getYearBlocksSignatures({
       setLoading,
-      addr: user.addr,
-    })
-    console.log(response, response2)
-    let newArray = [];
-    for (const key in response) {
-      if (response.hasOwnProperty(key)) {
-        newArray.push(response[key]);
-      }
-    }
-    setYearBlocksList(newArray);
-  };
-
-  const getUnattachedSign = async () => {
-    const res = await getUserUnattachedSignatures({
-      setLoading,
-      addr: user.addr,
+      addr: router.query.addr,
     });
-    console.log("getUserUnattachedSignatures res.....", res);
+
+    const newArray = Object.entries(response).map(([key, value]) => ({
+      id: parseInt(key),
+      ...(value || null),
+    }));
+
+    if (newArray.length > 0) {
+      setYearBlocksList(newArray);
+    } else {
+      setYearBlocksList([]);
+    }
   };
 
   useEffect(() => {
-    if (user.addr) {
+    if (router.query.addr) {
       getData();
-      // getUnattachedSign();
     }
-  }, [user]);
-
-  console.log("yearBlocksList....", yearBlocksList);
+  }, [router]);
 
   return (
     <Layout>

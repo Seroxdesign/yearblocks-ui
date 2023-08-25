@@ -12,8 +12,8 @@ function CreateSignYearBlock() {
   const attachSignature = async () => {
     const tx = await attachSignatureToYearblock({
       setLoading,
-      signatureID: 73950,
-      yearblockID: 331671,
+      signatureID: 396043, // TODO: this should be dynamic signature ID
+      yearblockID: 364399, // TODO: this should be dynamic yearBlock ID
     });
     console.log(tx, "tx....");
   };

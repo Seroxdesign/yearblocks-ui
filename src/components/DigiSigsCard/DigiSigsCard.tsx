@@ -1,14 +1,4 @@
-interface YearBlockCardTypes {
-  id: number;
-  name: string;
-  description: string;
-  image: string;
-  link: string;
-  target?: any;
-  thumbnail?: string;
-}
-
-function YearBlockCard({ data }: { data: YearBlockCardTypes }) {
+function DigiSigsCard({ data }: { data: any }) {
   return (
     <a href={data.link || "#"} target="_blank" className="w-full flex flex-col">
       <div
@@ -22,10 +12,10 @@ function YearBlockCard({ data }: { data: YearBlockCardTypes }) {
         {data.name}
       </div>
       <div className="text-sm lg:text-base text-gray-600 ellipsis-3 text-center">
-        {data.description}
+        {data.comment}
       </div>
     </a>
   );
 }
 
-export default YearBlockCard;
+export default DigiSigsCard;

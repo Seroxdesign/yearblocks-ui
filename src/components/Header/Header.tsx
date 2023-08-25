@@ -13,25 +13,6 @@ export interface HeaderType {
   link: string;
 }
 
-const headerLink: HeaderType[] = [
-  {
-    title: "My YearBlocks",
-    link: routes.myYearBlock,
-  },
-  {
-    title: "My DigiSigs",
-    link: routes.myDigiSigs,
-  },
-  {
-    title: "Sign a YearBlock",
-    link: routes.signYearBlock,
-  },
-  {
-    title: "About Us",
-    link: routes.aboutUs,
-  },
-];
-
 const userLinks = [
   {
     label: "Create New YearBlocks",
@@ -48,8 +29,28 @@ const userLinks = [
 ];
 
 function Header() {
-  const [expend, setExpend] = useState(false);
   const [user, setUser] = useState({ loggedIn: null, addr: null });
+  const headerLink: HeaderType[] = [
+    {
+      title: "My YearBlocks",
+      link: `${routes.myYearBlock}/${user.addr}`,
+    },
+    {
+      title: "My DigiSigs",
+      link: routes.myDigiSigs,
+    },
+    {
+      title: "Sign a YearBlock",
+      link: routes.signYearBlock,
+    },
+    {
+      title: "About Us",
+      link: routes.aboutUs,
+    },
+  ];
+
+  const [expend, setExpend] = useState(false);
+
   const { data: session, status } = useSession();
 
   useEffect(() => {

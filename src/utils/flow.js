@@ -606,6 +606,7 @@ async function getYearBlocksSignatures({ setLoading, addr }) {
       args: (arg, t) => [arg(addr, t.Address)],
     });
     setLoading(false);
+    console.log("getYearBlocksSignatures.....", res);
     return res;
   } catch (error) {
     setLoading(false);
