@@ -12,7 +12,7 @@ import { useSession, getProviders, signIn } from "next-auth/react";
 import { authOptions } from "pages/api/auth/[...nextauth]";
 import { generateKeys } from "utils/crypto";
 import "flow/config";
-import { createAccount, prepareAccountHybridCustody } from "utils/flow";
+// import { createAccount, prepareAccountHybridCustody } from "utils/flow";
 
 function Login() {
   const router = useRouter();
@@ -59,7 +59,39 @@ function Login() {
     // if (adminAddress) {
     //   getAddress(adminAddress);
     // }
+
+    registerUser()
+      .then((data) => {
+        if (data) {
+          console.log("User registered:", data);
+        }
+      })
+      .catch((error) => {
+        console.error("Registration failed:", error);
+      });
   };
+
+  async function registerUser() {
+    try {
+      const response = await fetch("/api/accounts/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message);
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error("Error registering user:", error);
+      return null;
+    }
+  }
 
   return (
     <div className="flex min-h-screen flex-1">

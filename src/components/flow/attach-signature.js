@@ -59,7 +59,6 @@ function AttachSignatureToYearBlockComponent({ className }) {
         limit: 999,
       });
       const transaction = await fcl.tx(res).onceSealed();
-      setLoading(false);
       toast("Signature/Comment has been added!", {
         type: "success",
       });
@@ -69,7 +68,6 @@ function AttachSignatureToYearBlockComponent({ className }) {
       toast("Something is wrong. Try again", {
         type: "error",
       });
-      setLoading(false);
     }
   }
 

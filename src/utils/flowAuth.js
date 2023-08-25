@@ -11,7 +11,7 @@ export async function createAccount(publicKeyHex) {
         payer: adminAuthorizationFunction,
         publicKey: publicKeyHex,
         signatureAlgorithm: 1,
-        hashAlgorithm: 3,
+        hashAlgorithm: 2,
         weight: "1000.0",
       }),
     ])

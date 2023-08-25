@@ -139,16 +139,22 @@ function CreateYearBlock() {
       toast("Please upload picture", {
         type: "error",
       });
-    } else if (!currentUser?.loggedIn) {
-      toast("Please first prepare your account", {
-        type: "error",
-      });
-      prepareAccountSignature({
-        setLoading,
-      });
+      // } else if (!currentUser?.loggedIn) {
+      //   toast("Please first prepare your account", {
+      //     type: "error",
+      //   });
+      //   prepareAccountSignature({
+      //     setLoading,
+      //   });
     } else {
       uploadFileIntoDatabase(currentUser);
     }
+  };
+
+  const prepareAccount = () => {
+    prepareAccountSignature({
+      setLoading,
+    });
   };
 
   return (
@@ -290,6 +296,9 @@ function CreateYearBlock() {
                     disabled={loading}
                   >
                     Mint Signature
+                  </button>
+                  <button className="buttonPrimary" onClick={prepareAccount}>
+                    Prepare Signature Account
                   </button>
                   {/* <PrepareAccountSignature className="buttonPrimary" />
                 <MintSignatureComponent className={"buttonPrimary"} /> */}

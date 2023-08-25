@@ -2,47 +2,6 @@ import Link from "next/link";
 import routes from "routes";
 import YearBlockCard from "components/YearBlockCard";
 
-const yearsList = [
-  {
-    name: "Claim My YearBlocks",
-    description: `Claim a copy of your school's YearBlocks by simply clicking on the
-    "Login with Google" button and use your school-provided email address.`,
-    image: "/images/distribute.jpeg",
-    link: routes.home,
-  },
-  {
-    name: "View My YearBlocks",
-    description: `Once you have claimed your YearBlocks, you can easily view them by accessing the dedicated My YearBlocks section, where you'll have access to browse and explore your school memories.`,
-    image: "/images/yearblock-1.webp",
-    link: routes.home,
-  },
-  {
-    name: "Sign a Friend’s YearBlock",
-    description: `You can sign your classmate’s YearBlock on the site by simply searching for their email, locating their YearBlock, and leaving a heartfelt message or signature to commemorate your friendship.`,
-    image: "/images/yearblock-2.webp",
-    link: routes.home,
-  },
-  {
-    name: "2022-2023 Steady Studios High",
-    description: `Campus YearBlock for the 2022-2023 School Year of Steady Studios`,
-    image: "/images/yearblock-3.webp",
-    link: routes.home,
-  },
-  {
-    name: "2021-2022 Steady’s Flunks High",
-    description: `Campus YearBlock for the 2021-2022 School Year of Steady Studios`,
-    image: "/images/flunks-public.webp",
-    link: routes.yearBlockPdf,
-    target: "_blank",
-  },
-  {
-    name: "Next Years Memories",
-    description: `Placeholder for all of next years memories that will be preserved in your next YearBlocks copy.`,
-    image: "/images/create.webp",
-    link: routes.home,
-  },
-];
-
 function YearsList({
   loading,
   yearBlocksList,
