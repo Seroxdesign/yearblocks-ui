@@ -44,11 +44,14 @@ function CreateYearBlock() {
     ) {
       let file = event.target.files[0];
       setFile(file);
+    } else {
+      console.log("upload try again...");
     }
   };
 
   const uploadFileIntoDatabase = (currentUser: any) => {
     if (file) {
+      setLoading(true);
       const storageRef = storage.ref("images/" + file.name);
       const uploadTask = storageRef.put(file);
 
@@ -92,6 +95,7 @@ function CreateYearBlock() {
                     name: values.signature,
                   });
                   resetInputs();
+                  setLoading(false);
                 })
                 .catch((e) => {
                   console.log(e);
@@ -110,6 +114,10 @@ function CreateYearBlock() {
             });
         }
       );
+    } else {
+      toast("Please upload the correct file", {
+        type: "error",
+      });
     }
   };
 

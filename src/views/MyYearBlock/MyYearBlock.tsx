@@ -38,9 +38,11 @@ function MyYearBlock() {
   useEffect(() => {
     if (user.addr) {
       getData();
-      getUnattachedSign();
+      // getUnattachedSign();
     }
   }, [user]);
+
+  console.log("yearBlocksList....", yearBlocksList);
 
   return (
     <Layout>

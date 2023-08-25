@@ -32,6 +32,13 @@ function CreateYearBlock() {
   };
 
   useEffect(() => {
+    setValues({
+      ...values,
+      whiteList: session?.user?.email || "",
+    });
+  }, [session]);
+
+  useEffect(() => {
     checkIsUserValid();
   }, []);
 
@@ -103,18 +110,10 @@ function CreateYearBlock() {
                   yearBlockLink: values.link,
                   yearBlockDescription: values.description,
                   thumbnail: imageUrl,
-                  allowList: [session?.user?.email],
+                  allowList: [values.whiteList],
                   timestamp: firebase.firestore.FieldValue.serverTimestamp(),
                 })
                 .then(async () => {
-                  console.log("data....", {
-                    id: uniqueId,
-                    link: values.link,
-                    thumbnail: imageUrl,
-                    allowList: [session?.user?.email],
-                    name: values.yearBlockName,
-                    description: values.description,
-                  });
                   await mintYearBlockNFT({
                     setLoading,
                     id: uniqueId,
@@ -158,6 +157,10 @@ function CreateYearBlock() {
       });
     } else if (!values.link) {
       toast("YearBlock link is required", {
+        type: "error",
+      });
+    } else if (!values.whiteList) {
+      toast("Whitelist value is required.", {
         type: "error",
       });
     } else if (!values.description) {
@@ -268,6 +271,7 @@ function CreateYearBlock() {
                     <input
                       type="text"
                       name="whiteList"
+                      placeholder="example@gmail.com"
                       value={values.whiteList}
                       onChange={handleInput}
                       className="w-full rounded-md border-0 py-1.5 px-4 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-primary-700 sm:text-base sm:leading-8"
