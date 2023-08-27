@@ -42,48 +42,6 @@ function Login() {
     await console.log(tx, 'tx')
   };
 
-  const handleGetWalletAddress = async () => {
-    // let adminKey =
-    //   "ee6b1013ceba221deebaaaba9bcbd6810196f0db85ef7c3c538eb0b1930be5785c413c39663b543f6ae2d69620a71539d32b6af2587534e4286aa61d2710c352";
-    // let adminAddress = fcl.withPrefix(adminKey || "");
-    // await createAccount(setLoading, adminKey, 2.5);
-    // if (adminAddress) {
-    //   getAddress(adminAddress);
-    // }
-
-    registerUser()
-      .then((data) => {
-        if (data) {
-          console.log("User registered:", data);
-        }
-      })
-      .catch((error) => {
-        console.error("Registration failed:", error);
-      });
-  };
-
-  async function registerUser() {
-    try {
-      const response = await fetch("/api/accounts/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      console.log(response, 'test')
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message);
-      }
-
-      const data = await response.json();
-      return data;
-    } catch (error) {
-      console.error("Error registering user:", error);
-      return null;
-    }
-  }
-
   return (
     <div className="flex min-h-screen flex-1">
       <div className="flex flex-1 flex-col px-5 py-10 sm:px-6 lg:flex-none lg:px-24 xl:px-20">
