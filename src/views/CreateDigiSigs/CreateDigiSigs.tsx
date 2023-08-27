@@ -44,11 +44,14 @@ function CreateYearBlock() {
     ) {
       let file = event.target.files[0];
       setFile(file);
+    } else {
+      console.log("upload try again...");
     }
   };
 
   const uploadFileIntoDatabase = (currentUser: any) => {
     if (file) {
+      setLoading(true);
       const storageRef = storage.ref("images/" + file.name);
       const uploadTask = storageRef.put(file);
 
@@ -92,6 +95,7 @@ function CreateYearBlock() {
                     name: values.signature,
                   });
                   resetInputs();
+                  setLoading(false);
                 })
                 .catch((e) => {
                   console.log(e);
@@ -110,6 +114,10 @@ function CreateYearBlock() {
             });
         }
       );
+    } else {
+      toast("Please upload the correct file", {
+        type: "error",
+      });
     }
   };
 
@@ -131,16 +139,22 @@ function CreateYearBlock() {
       toast("Please upload picture", {
         type: "error",
       });
-    } else if (!currentUser?.loggedIn) {
-      toast("Please first prepare your account", {
-        type: "error",
-      });
-      prepareAccountSignature({
-        setLoading,
-      });
+      // } else if (!currentUser?.loggedIn) {
+      //   toast("Please first prepare your account", {
+      //     type: "error",
+      //   });
+      //   prepareAccountSignature({
+      //     setLoading,
+      //   });
     } else {
       uploadFileIntoDatabase(currentUser);
     }
+  };
+
+  const prepareAccount = () => {
+    prepareAccountSignature({
+      setLoading,
+    });
   };
 
   return (
@@ -282,6 +296,9 @@ function CreateYearBlock() {
                     disabled={loading}
                   >
                     Mint Signature
+                  </button>
+                  <button className="buttonPrimary" onClick={prepareAccount}>
+                    Prepare Signature Account
                   </button>
                   {/* <PrepareAccountSignature className="buttonPrimary" />
                 <MintSignatureComponent className={"buttonPrimary"} /> */}

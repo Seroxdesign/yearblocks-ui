@@ -1,6 +1,25 @@
 import Link from "next/link";
+import { getUserUnattachedSignatures } from "utils/flow";
+import { useState, useEffect } from "react";
+import * as fcl from "@onflow/fcl";
 
 function DigiSigsFeature() {
+  const [loading, setLoading] = useState(false);
+  const [user, setUser] = useState({ loggedIn: false, addr: undefined });
+
+  useEffect(() => {
+    fcl.currentUser.subscribe(setUser);
+  }, [user.addr]);
+
+  //Use this to get connected user's unattached signatures
+  const getData = async () => {
+    const response = await getUserUnattachedSignatures({
+      setLoading,
+      addr: user.addr,
+    });
+    console.log("user sigs list...", response);
+  };
+
   return (
     <div className="w-full flex justify-center my-8 lg:my-12">
       <div className="w-full max-w-8xl margins flex flex-col gap-y-8 sm:gap-y-12 lg:gap-y-16">
@@ -17,12 +36,18 @@ function DigiSigsFeature() {
               {`Using the platform, you can easily capture your digital signature, allowing you to personalize your YearBlocks and leave a unique mark to commemorate your school memories.`}
             </div>
 
-            <Link
-              href="/create-digisigs"
-              className="buttonPrimary max-w-fit min-w-[120px]"
-            >
-              Create My DigiSigs
-            </Link>
+            <div className="flex items-center gap-x-4">
+              <Link href="/create-digisigs" className="buttonPrimary max-w-fit">
+                Create My DigiSigs
+              </Link>
+              <Link
+                href={`/digisigs/${user.addr}`}
+                className="buttonPrimary"
+                onClick={getData}
+              >
+                View My DigiSigs
+              </Link>
+            </div>
           </div>
         </div>
         <div className="flex items-center flex-col md:flex-row gap-y-6 md:gap-y-0 md:gap-x-8 lg:gap-x-12">

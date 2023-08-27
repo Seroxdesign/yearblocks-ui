@@ -3,9 +3,20 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { BsCardImage } from "react-icons/bs";
 import AttachSignatureToYearBlockComponent from "components/flow/attach-signature";
+import { attachSignatureToYearblock } from "utils/flow";
 
 function CreateSignYearBlock() {
   const [activeTab, setActiveTab] = useState("create-new");
+  const [loading, setLoading] = useState(false);
+
+  const attachSignature = async () => {
+    const tx = await attachSignatureToYearblock({
+      setLoading,
+      signatureID: 396043, // TODO: this should be dynamic signature ID
+      yearblockID: 364399, // TODO: this should be dynamic yearBlock ID
+    });
+    console.log(tx, "tx....");
+  };
 
   return (
     <Layout>
@@ -27,7 +38,7 @@ function CreateSignYearBlock() {
                       ? "bg-primary-700 text-white"
                       : "transparent text-gray-500"
                   }`}
-                  onClick={() => setActiveTab("create-new")}
+                  onClick={() => attachSignature}
                 >
                   Create New
                 </div>
@@ -137,6 +148,7 @@ function CreateSignYearBlock() {
                 </div>
               </div>
               <div className="w-full flex items-center gap-x-5">
+                <button onClick={attachSignature}>Attch</button>
                 <AttachSignatureToYearBlockComponent className="buttonPrimary" />
               </div>
             </div>

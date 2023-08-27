@@ -1,37 +1,44 @@
+import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import Layout from "components/Layout";
+import { getUserYearBlock, getYearBlocksSignatures } from "utils/flow";
 import YearsList from "./YearsList";
-import { getUserYearBlock } from "utils/flow";
-import * as fcl from "@onflow/fcl";
 
 function MyYearBlock() {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [user, setUser] = useState({ loggedIn: false, addr: undefined });
   const [yearBlocksList, setYearBlocksList] = useState<any | []>([]);
-
-  useEffect(() => {
-    fcl.currentUser.subscribe(setUser);
-  }, [user.addr]);
 
   const getData = async () => {
     const response = await getUserYearBlock({
       setLoading,
-      addr: user.addr,
+      addr: router.query.addr,
     });
-    let newArray = [];
-    for (const key in response) {
-      if (response.hasOwnProperty(key)) {
-        newArray.push(response[key]);
-      }
+
+    // TODO: What is getYearBlocksSignatures and from which form it is
+    // get YearBlocks and signatures
+    const response2 = getYearBlocksSignatures({
+      setLoading,
+      addr: router.query.addr,
+    });
+
+    const newArray = Object.entries(response).map(([key, value]) => ({
+      id: parseInt(key),
+      ...(value || null),
+    }));
+
+    if (newArray.length > 0) {
+      setYearBlocksList(newArray);
+    } else {
+      setYearBlocksList([]);
     }
-    setYearBlocksList(newArray);
   };
 
   useEffect(() => {
-    if (user.addr) {
+    if (router.query.addr) {
       getData();
     }
-  }, [user]);
+  }, [router]);
 
   return (
     <Layout>
