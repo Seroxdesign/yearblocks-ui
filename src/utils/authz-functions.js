@@ -1,8 +1,9 @@
 import { getUrl } from "./get-url";
 
 export function adminAuthorizationFunction(account) {
-  const address = process.env.NEXT_PUBLIC_ADMIN_ADDRESS;
+  const address = '0x24a3cbe995e718ff';
   const keyIndex = process.env.NEXT_PUBLIC_ADMIN_KEY_INDEX;
+  console.log(address, keyIndex)
   return {
     ...account, // bunch of defaults in here, we want to overload some of them though
     tempId: `${address}-${keyIndex}`, // tempIds are more of an advanced topic, for 99% of the times where you know the address and keyId you will want it to be a unique string per that address and keyId
@@ -21,7 +22,7 @@ export function adminAuthorizationFunction(account) {
           message: signable.message,
         }),
       }).then((res) => res.json());
-
+      console.log(address, 'signingFunction', signature)
       return {
         addr: address, // needs to be the same as the account.addr
         keyId: Number(keyIndex), // needs to be the same as account.keyId, once again make sure its a number and not a string

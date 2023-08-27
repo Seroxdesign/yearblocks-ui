@@ -12,16 +12,16 @@ import { useSession, getProviders, signIn } from "next-auth/react";
 import { authOptions } from "pages/api/auth/[...nextauth]";
 import { generateKeys } from "utils/crypto";
 import "flow/config";
-// import { createAccount, prepareAccountHybridCustody } from "utils/flow";
+import { createAccount, prepareAccountHybridCustody } from "utils/flow";
 
 function Login() {
   const router = useRouter();
   const { data: session, status } = useSession();
   const [loading, setLoading] = useState(false);
 
-  // if (session?.user) {
-  //   router.push("/");
-  // }
+  if (session?.user) {
+    router.push("/");
+  }
 
   const executeScript = useCallback(
     async (cadence: string, args: any = () => []) => {
@@ -38,17 +38,8 @@ function Login() {
   );
 
   const getAddress = async (adminAddress: any) => {
-    const gameAccountKeys = await generateKeys();
-    if (gameAccountKeys) {
-      const res: string = await executeScript(
-        "0x24a3cbe995e718ff",
-        (arg: any, t: any) => [
-          arg(adminAddress, t.Address),
-          arg(gameAccountKeys.publicKey, t.String),
-        ]
-      );
-      console.log("res....", res);
-    }
+    const tx = await createAccount('ee6b1013ceba221deebaaaba9bcbd6810196f0db85ef7c3c538eb0b1930be5785c413c39663b543f6ae2d69620a71539d32b6af2587534e4286aa61d2710c352', 2.5)
+    await console.log(tx, 'tx')
   };
 
   const handleGetWalletAddress = async () => {
@@ -79,7 +70,7 @@ function Login() {
           "Content-Type": "application/json",
         },
       });
-
+      console.log(response, 'test')
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.message);
@@ -139,7 +130,7 @@ function Login() {
 
               <button
                 className="buttonPrimary mt-8 w-full"
-                onClick={handleGetWalletAddress}
+                onClick={getAddress}
               >
                 Get Wallet Address
               </button>

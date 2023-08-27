@@ -12,6 +12,7 @@ const createAccount = async (req: NextApiRequest, res: NextApiResponse) => {
   // }
 
   const keys = await generateKeys();
+  console.log("keys....", keys)
   const address = await createAccountUtil(keys.publicKey);
 
   console.log("address....", address);

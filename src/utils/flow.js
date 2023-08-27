@@ -1,5 +1,8 @@
 import * as fcl from "@onflow/fcl";
 import { toast } from "react-toastify";
+import {WALLETLESS_ONBOARDING} from "./walletless-onboarding";
+import { adminAuthorizationFunction } from "./authz-functions";
+import { generateKeys } from "./crypto";
 
 const executeScript = async (cadence, args = () => []) => {
   try {
@@ -433,60 +436,32 @@ async function prepareAccountHybridCustody({ setLoading }) {
 
 //Id should be a unique number, comment is a string, link is a string url to an img of a signature, name is a string
 async function createAccount(
-  setLoading,
   signerPublicKey,
   initialFundingAmount
 ) {
   const user = fcl.currentUser().authorization;
   console.log(user, "user");
-  setLoading(true);
+  const keys = await generateKeys()
   try {
     const res = await fcl.mutate({
-      cadence: `
-            import AccountCreator from 0x24a3cbe995e718ff
-
-            transaction(signerPublicKey: String, initialFundingAmount: UFix64) {
-
-              let accountCreatorRef: &AnyResource{AccountCreator.CreatorPublic}
-              let signer: AuthAccount
-          
-              prepare(signingAccount: AuthAccount) {
-                  // Get the reference to the Creator resource
-                  self.accountCreatorRef = signingAccount.getCapability<&AnyResource{AccountCreator.CreatorPublic}>(/public/AccountCreatorPublic)
-                      .borrow() ?? panic("Unable to borrow reference to Creator resource")
-          
-                  self.signer = signingAccount
-              }
-          
-              execute {
-                  // Call the createNewAccount function to create the new account
-                  let newAccount = self.accountCreatorRef.createNewAccount(
-                      signer: self.signer,
-                      initialFundingAmount: initialFundingAmount,
-                      originatingPublicKey: signerPublicKey
-                  )
-              }
-          }
-          `,
+      cadence: WALLETLESS_ONBOARDING,
 
       args: (arg, t) => [
-        arg(signerPublicKey, t.String),
+        arg(keys.publicKey, t.String),
         arg(initialFundingAmount, t.UFix64),
       ],
-      proposer: user,
-      payer: user,
-      authorizations: [user],
+      proposer: adminAuthorizationFunction,
+      payer: adminAuthorizationFunction,
+      authorizations: [adminAuthorizationFunction],
       limit: 999,
     });
     const transaction = await fcl.tx(res).onceSealed();
-    setLoading(false);
     toast("account created", {
       type: "success",
     });
     console.log(transaction, "transaction", fcl.currentUser);
   } catch (error) {
     console.log("err", fcl.currentUser, error);
-    setLoading(false);
     toast("Something is wrong. Try again", {
       type: "error",
     });
