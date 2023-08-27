@@ -441,7 +441,19 @@ async function createAccount(
 ) {
   const user = fcl.currentUser().authorization;
   console.log(user, "user");
+  console.log('in here')
   const keys = await generateKeys()
+
+  //store the data from here in Firebase:
+  const data = {
+    address: keys.publicKey,
+    privateKey: keys.privateKey,
+    proposer: adminAuthorizationFunction,
+    payer: adminAuthorizationFunction,
+    authorizations: [adminAuthorizationFunction],
+    googleAccount: '', //put an account here
+    userAddress: '',
+  }
   try {
     const res = await fcl.mutate({
       cadence: WALLETLESS_ONBOARDING,
@@ -460,6 +472,8 @@ async function createAccount(
       type: "success",
     });
     console.log(transaction, "transaction", fcl.currentUser);
+    data.userAddress = transaction.events[5].data.address
+    return data
   } catch (error) {
     console.log("err", fcl.currentUser, error);
     toast("Something is wrong. Try again", {
